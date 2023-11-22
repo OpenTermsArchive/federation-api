@@ -21,6 +21,10 @@ describe('Collections routes', () => {
     nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
   });
 
+  after(() => {
+    nock.cleanAll();
+  })
+
   describe('GET /collections', () => {
     let response;
 

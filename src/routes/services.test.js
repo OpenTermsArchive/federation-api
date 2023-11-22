@@ -59,6 +59,10 @@ describe('Services routes', () => {
     nock('http://collection-2.org').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
 
+  after(() => {
+    nock.cleanAll();
+  })
+
   describe('GET /services', () => {
     let response;
 
