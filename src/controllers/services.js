@@ -15,9 +15,9 @@ export const getServices = async (req, res) => {
   const results = [];
   const failures = [];
 
-  await Promise.all(collections.map(async ({ name: collectionName, endpoint }) => {
+  await Promise.all(collections.map(async ({ id: collectionId, endpoint }) => {
     const services = await fetchServices(endpoint).catch(error => {
-      failures.push({ collection: collectionName, message: error.toString() });
+      failures.push({ collection: collectionId, message: error.toString() });
     });
 
     if (!services) {
@@ -37,7 +37,7 @@ export const getServices = async (req, res) => {
       }
 
       results.push({
-        collection: collectionName,
+        collection: collectionId,
         service: {
           id: service.id,
           name: service.name,
@@ -65,9 +65,9 @@ export const getService = async (req, res) => {
   const results = [];
   const failures = [];
 
-  await Promise.all(collections.map(async ({ name: collectionName, endpoint }) => {
+  await Promise.all(collections.map(async ({ id: collectionId, endpoint }) => {
     const services = await fetchServices(endpoint).catch(error => {
-      failures.push({ collection: collectionName, message: error.toString() });
+      failures.push({ collection: collectionId, message: error.toString() });
     });
 
     if (!services) {
@@ -80,7 +80,7 @@ export const getService = async (req, res) => {
       }
 
       results.push({
-        collection: collectionName,
+        collection: collectionId,
         service: {
           id: service.id,
           name: service.name,

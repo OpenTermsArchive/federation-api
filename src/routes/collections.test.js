@@ -11,7 +11,7 @@ const COLLECTIONS_RESULT = {
     endpoint: 'http://collection-1.org/api/v1',
   },
   'Collection 2': {
-    id: 'collection 2',
+    id: 'collection-2',
     endpoint: 'http://collection-2.org/api/v1',
   },
 };

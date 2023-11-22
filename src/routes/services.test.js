@@ -11,7 +11,7 @@ export const COLLECTIONS_RESULT = {
     endpoint: 'http://collection-1.org/api/v1',
   },
   'Collection 2': {
-    id: 'collection 2',
+    id: 'collection-2',
     endpoint: 'http://collection-2.org/api/v1',
   },
 };
@@ -139,7 +139,7 @@ describe('Services routes', () => {
         it('returns a results array with matching services based on the query parameter', () => {
           expect(response.body).to.have.property('results').that.is.an('array');
           expect(response.body.results).to.have.lengthOf(1);
-          expect(response.body.results[0].collection).to.equal('Collection 1');
+          expect(response.body.results[0].collection).to.equal('collection-1');
           expect(response.body.results[0].service.id).to.equal('service-2');
         });
 
@@ -171,7 +171,7 @@ describe('Services routes', () => {
         it('returns a results array with matching services based on the query parameter', () => {
           expect(response.body).to.have.property('results').that.is.an('array');
           expect(response.body.results).to.have.lengthOf(1);
-          expect(response.body.results[0].collection).to.equal('Collection 2');
+          expect(response.body.results[0].collection).to.equal('collection-2');
           expect(response.body.results[0].service.id).to.equal('service-3');
         });
 
@@ -203,7 +203,7 @@ describe('Services routes', () => {
         it('returns a results array with matching services based on the query parameters', () => {
           expect(response.body).to.have.property('results').that.is.an('array');
           expect(response.body.results).to.have.lengthOf(1);
-          expect(response.body.results[0].collection).to.equal('Collection 1');
+          expect(response.body.results[0].collection).to.equal('collection-1');
           expect(response.body.results[0].service.id).to.equal('service-2');
         });
       });
@@ -308,22 +308,22 @@ describe('Services routes', () => {
         });
 
         it('has the proper url', () => {
-          const [resultCollection1] = response.body.results.filter(result => result.collection == 'Collection 1');
+          const [resultCollection1] = response.body.results.filter(result => result.collection == 'collection-1');
 
           expect(resultCollection1.service).to.have.property('url').that.is.equal('http://collection-1.org/api/v1/service/service-1');
 
-          const [resultCollection2] = response.body.results.filter(result => result.collection == 'Collection 2');
+          const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
           expect(resultCollection2.service).to.have.property('url').that.is.equal('http://collection-2.org/api/v1/service/service-1');
         });
 
         it('has the proper array of termsTypes', () => {
-          const [resultCollection1] = response.body.results.filter(result => result.collection == 'Collection 1');
+          const [resultCollection1] = response.body.results.filter(result => result.collection == 'collection-1');
 
           expect(resultCollection1.service).to.have.property('termsTypes');
           expect(resultCollection1.service.termsTypes).to.have.deep.members(['Privacy Policy']);
 
-          const [resultCollection2] = response.body.results.filter(result => result.collection == 'Collection 2');
+          const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
           expect(resultCollection2.service).to.have.property('termsTypes');
           expect(resultCollection2.service.termsTypes).to.have.deep.members([ 'Terms of Service', 'Privacy Policy' ]);
