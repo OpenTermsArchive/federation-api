@@ -8,7 +8,7 @@ const app = express();
 
 export const basePath = '/v1';
 
-app.use(basePath, apiRouter());
+app.use(basePath, apiRouter(basePath));
 
 const port = config.get('port');
 
