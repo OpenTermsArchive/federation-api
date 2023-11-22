@@ -3,11 +3,9 @@ import config from 'config';
 import nock from 'nock';
 import request from 'supertest';
 
-import app from './index.js';
+import app, { basePath } from '../index.js';
 
-const basePath = '';
-
-const COLLECTIONS_RESULT = {
+export const COLLECTIONS_RESULT = {
   'Collection 1': {
     id: 'collection-1',
     endpoint: 'http://collection-1.org/api/v1',
@@ -54,52 +52,11 @@ const COLLECTION_2_SERVICES_RESULT = [
   },
 ];
 
-describe('Services API', () => {
+describe('Services routes', () => {
   before(() => {
     nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
     nock('http://collection-1.org').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
     nock('http://collection-2.org').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
-  });
-
-  describe('GET /collections', () => {
-    let response;
-
-    before(async () => {
-      response = await request(app).get(`${basePath}/collections`);
-    });
-
-    it('responds with 200 status code', () => {
-      expect(response.status).to.equal(200);
-    });
-
-    it('responds with Content-Type application/json', () => {
-      expect(response.type).to.equal('application/json');
-    });
-
-    it('returns an non empty array of collections', () => {
-      expect(response.body).to.be.an('array');
-      expect(response.body).to.not.be.empty;
-    });
-
-    describe('each #collection object', () => {
-      it('has an id', () => {
-        response.body.forEach(collection => {
-          expect(collection).to.have.property('id').that.is.a('string');
-        });
-      });
-
-      it('has a name', () => {
-        response.body.forEach(collection => {
-          expect(collection).to.have.property('name').that.is.a('string');
-        });
-      });
-
-      it('has an endpoint', () => {
-        response.body.forEach(collection => {
-          expect(collection).to.have.property('endpoint').that.is.a('string');
-        });
-      });
-    });
   });
 
   describe('GET /services', () => {
