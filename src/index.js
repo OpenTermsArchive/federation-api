@@ -3,12 +3,19 @@ import express from 'express';
 
 import apiRouter from './routes/index.js';
 
+import errorsMiddleware from './middlewares/errors.js';
+import loggerMiddleware from './middlewares/logger.js';
+
 const app = express();
 
+if (process.env.NODE_ENV !== 'test') {
+  app.use(loggerMiddleware);
+}
 
 export const basePath = '/v1';
 
 app.use(basePath, apiRouter(basePath));
+app.use(errorsMiddleware);
 
 const port = config.get('port');
 

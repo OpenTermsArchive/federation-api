@@ -1,0 +1,8 @@
+{
+  "logger": {
+    "sendMailOnError": {
+      "from": "noreply@opentermsarchive.org",
+      "to": "admin@opentermsarchive.org"
+    }
+  }
+}
