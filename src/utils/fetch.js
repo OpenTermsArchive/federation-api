@@ -1,3 +1,4 @@
+// Adapted from the example provided in the node-fetch documentation on handling client and server errors. See https://github.com/node-fetch/node-fetch#handling-client-and-server-errors.
 import nodeFetch from 'node-fetch';
 
 class HTTPResponseError extends Error {
