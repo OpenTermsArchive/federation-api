@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import request from 'supertest';
 
-import app, { basePath } from '../index.js';
+import app, { BASE_PATH } from '../index.js';
 
 describe('Docs API', () => {
   describe('GET /docs', () => {
@@ -9,7 +9,7 @@ describe('Docs API', () => {
 
     context('When requested as JSON', () => {
       before(async () => {
-        response = await request(app).get(`${basePath}/docs/`).set('Accept', 'application/json');
+        response = await request(app).get(`${BASE_PATH}/docs/`).set('Accept', 'application/json');
       });
 
       it('responds with 200 status code', () => {
@@ -57,7 +57,7 @@ describe('Docs API', () => {
 
     context('When requested as HTML', () => {
       before(async () => {
-        response = await request(app).get(`${basePath}/docs/`);
+        response = await request(app).get(`${BASE_PATH}/docs/`);
       });
 
       it('responds with 200 status code', () => {

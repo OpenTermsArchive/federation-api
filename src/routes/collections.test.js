@@ -3,7 +3,7 @@ import config from 'config';
 import nock from 'nock';
 import request from 'supertest';
 
-import app, { basePath } from '../index.js';
+import app, { BASE_PATH } from '../index.js';
 
 const COLLECTIONS_RESULT = {
   'Collection 1': {
@@ -29,7 +29,7 @@ describe('Collections routes', () => {
     let response;
 
     before(async () => {
-      response = await request(app).get(`${basePath}/collections`);
+      response = await request(app).get(`${BASE_PATH}/collections`);
     });
 
     it('responds with 200 status code', () => {

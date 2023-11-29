@@ -3,7 +3,7 @@ import config from 'config';
 import nock from 'nock';
 import request from 'supertest';
 
-import app, { basePath } from '../index.js';
+import app, { BASE_PATH } from '../index.js';
 
 export const COLLECTIONS_RESULT = {
   'Collection 1': {
@@ -68,7 +68,7 @@ describe('Services routes', () => {
 
     context('with no query params', () => {
       before(async () => {
-        response = await request(app).get(`${basePath}/services`);
+        response = await request(app).get(`${BASE_PATH}/services`);
       });
 
       it('responds with 200 status code', () => {
@@ -134,7 +134,7 @@ describe('Services routes', () => {
       context('with name query param', () => {
         context('when it matches a service name', () => {
           before(async () => {
-            response = await request(app).get(`${basePath}/services?name=Service%202`);
+            response = await request(app).get(`${BASE_PATH}/services?name=Service%202`);
           });
 
           it('responds with 200 status code', () => {
@@ -151,7 +151,7 @@ describe('Services routes', () => {
 
         context('when it does not full match a service name', () => {
           before(async () => {
-            response = await request(app).get(`${basePath}/services?name=service`);
+            response = await request(app).get(`${BASE_PATH}/services?name=service`);
           });
 
           it('responds with 200 status code', () => {
@@ -166,7 +166,7 @@ describe('Services routes', () => {
 
         context('when it matches no services', () => {
           before(async () => {
-            response = await request(app).get(`${basePath}/services?name=unknown%20name`);
+            response = await request(app).get(`${BASE_PATH}/services?name=unknown%20name`);
           });
 
           it('responds with 200 status code', () => {
@@ -183,7 +183,7 @@ describe('Services routes', () => {
       context('with termsTypes query param', () => {
         context('with one matching terms types', () => {
           before(async () => {
-            response = await request(app).get(`${basePath}/services?termsTypes=Community%20Guidelines`);
+            response = await request(app).get(`${BASE_PATH}/services?termsTypes=Community%20Guidelines`);
           });
 
           it('responds with 200 status code', () => {
@@ -200,7 +200,7 @@ describe('Services routes', () => {
 
         context('with an array of matching terms types', () => {
           before(async () => {
-            response = await request(app).get(`${basePath}/services?termsTypes=Privacy%20Policy&termsTypes=Terms%20of%20Service`);
+            response = await request(app).get(`${BASE_PATH}/services?termsTypes=Privacy%20Policy&termsTypes=Terms%20of%20Service`);
           });
 
           it('responds with 200 status code', () => {
@@ -216,7 +216,7 @@ describe('Services routes', () => {
 
         context('with non-matching termsTypes query param', () => {
           before(async () => {
-            response = await request(app).get(`${basePath}/services?termsTypes=unknown%20type`);
+            response = await request(app).get(`${BASE_PATH}/services?termsTypes=unknown%20type`);
           });
 
           it('responds with 200 status code', () => {
@@ -232,7 +232,7 @@ describe('Services routes', () => {
 
       context('with both name and termsTypes query params', () => {
         before(async () => {
-          response = await request(app).get(`${basePath}/services?name=Service%202&termsTypes=Privacy%20Policy`);
+          response = await request(app).get(`${BASE_PATH}/services?name=Service%202&termsTypes=Privacy%20Policy`);
         });
 
         it('responds with 200 status code', () => {
@@ -257,7 +257,7 @@ describe('Services routes', () => {
           message: 'something went wrong',
           code: 'ERROR',
         });
-        response = await request(app).get(`${basePath}/services`);
+        response = await request(app).get(`${BASE_PATH}/services`);
       });
 
       it('returns a non empty results array', () => {
@@ -304,7 +304,7 @@ describe('Services routes', () => {
     before(async () => {
       nock('http://collection-1.org').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
       nock('http://collection-2.org').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
-      response = await request(app).get(`${basePath}/service/service-1`);
+      response = await request(app).get(`${BASE_PATH}/service/service-1`);
     });
 
     it('responds with 200 status code', () => {
@@ -377,7 +377,7 @@ describe('Services routes', () => {
 
     context('when no matching service is found', () => {
       before(async () => {
-        response = await request(app).get(`${basePath}/service/service-inexistent`);
+        response = await request(app).get(`${BASE_PATH}/service/service-inexistent`);
       });
 
       it('responds with 404 status code', () => {
