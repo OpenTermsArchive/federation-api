@@ -7,15 +7,15 @@ export const fetchCollections = async () => {
 
   const collections = await response.json();
 
-  return Object.keys(collections).reduce((accumulator, collectionName) => {
+  return Object.keys(collections).reduce((result, collectionName) => {
     if (collections[collectionName].endpoint) {
-      accumulator.push({
+      result.push({
         name: collectionName,
         id: collections[collectionName].id,
         endpoint: collections[collectionName].endpoint,
       });
     }
 
-    return accumulator;
+    return result;
   }, []);
 };
