@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default function specsRouter(basePath) {
+function specsRouter(basePath) {
   const router = express.Router();
   const specs = swaggerJsdoc({
     definition: {
@@ -36,3 +36,5 @@ export default function specsRouter(basePath) {
 
   return router;
 }
+
+export default specsRouter;
