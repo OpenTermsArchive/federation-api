@@ -4,13 +4,7 @@ import { fetchServices } from '../services/services.js';
 export const getServices = async (req, res) => {
   const { name, termsTypes } = req.query;
 
-  const collections = await fetchCollections().catch(error => {
-    res.status(error.response?.status || 500).json({ error: `${error.message} (${error.code})` });
-  });
-
-  if (!collections) {
-    return;
-  }
+  const collections = await fetchCollections();
 
   const results = [];
   const failures = [];
@@ -54,13 +48,7 @@ export const getServices = async (req, res) => {
 export const getService = async (req, res) => {
   const { serviceId } = req.params;
 
-  const collections = await fetchCollections().catch(error => {
-    res.status(error.response?.status || 500).json({ error: `${error.message} (${error.code})` });
-  });
-
-  if (!collections) {
-    return;
-  }
+  const collections = await fetchCollections();
 
   const results = [];
   const failures = [];

@@ -1,10 +1,10 @@
 import config from 'config';
 import express from 'express';
-
-import apiRouter from './routes/index.js';
+import 'express-async-errors';
 
 import errorsMiddleware from './middlewares/errors.js';
 import loggerMiddleware from './middlewares/logger.js';
+import apiRouter from './routes/index.js';
 
 const app = express();
 
@@ -16,7 +16,6 @@ export const basePath = '/v1';
 
 app.use(basePath, apiRouter(basePath));
 app.use(errorsMiddleware);
-
 const port = config.get('port');
 
 app.listen(port, () => {
