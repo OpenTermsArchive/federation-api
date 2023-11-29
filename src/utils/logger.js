@@ -23,7 +23,7 @@ if (config.get('logger.sendMailOnError')) {
     formatter: args => args[Object.getOwnPropertySymbols(args)[1]], // Returns the full error message, the same that is visible in the console. It is referenced in the argument object with a Symbol of which we do not have the reference to but we know it is the second one.
     exitOnError: true,
     level: 'error',
-    subject: `[OTA Federeated API] Error Report — ${os.hostname()}`,
+    subject: `[OTA] [Federated API] Error — ${os.hostname()}`,
   }));
 }
 
