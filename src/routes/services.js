@@ -16,9 +16,15 @@ import { getServices, getService } from '../controllers/services.js';
  *         id:
  *           type: string
  *           description: The ID of the service.
+  *           externalDocs:
+ *             description: Open Terms Archive documentation
+ *             url: https://docs.opentermsarchive.org/contributing-terms/#service-id
  *         name:
  *           type: string
  *           description: The name of the service.
+ *           externalDocs:
+ *             description: Open Terms Archive documentation
+ *             url: https://docs.opentermsarchive.org/contributing-terms/#service-name
  *         url:
  *           type: string
  *           description: The URL where the service can be found.
