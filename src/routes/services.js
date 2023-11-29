@@ -16,7 +16,7 @@ import { getServices, getService } from '../controllers/services.js';
  *         id:
  *           type: string
  *           description: The ID of the service.
-  *           externalDocs:
+ *           externalDocs:
  *             description: Open Terms Archive documentation
  *             url: https://docs.opentermsarchive.org/contributing-terms/#service-id
  *         name:
@@ -98,9 +98,9 @@ router.get('/services', getServices);
  *       - in: path
  *         name: serviceId
  *         required: true
+ *         description: The service ID used to filter.
  *         schema:
  *           type: string
- *         description: The service ID used to filter.
  *     responses:
  *       200:
  *         description: A JSON object containing an array of results with the declarations of the given service ID across all collections, and an array of failures potentially encountered when querying the federated collections.
@@ -135,6 +135,27 @@ router.get('/services', getServices);
  *         externalDocs:
  *           description: Open Terms Archive documentation
  *           url: https://docs.opentermsarchive.org/contributing-terms/#service-id
+ *       '404':
+ *         description: No matching service found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items: null
+ *                 failures:
+ *                   type: array
+ *                   items:
+ *                    type: object
+ *                    properties:
+ *                      collection:
+ *                        type: string
+ *                        description: The id of the collection.
+ *                      message:
+ *                        type: string
+ *                        description: The raw message error of the failure that occurred.
  */
 router.get('/service/:serviceId', getService);
 
