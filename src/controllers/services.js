@@ -2,7 +2,7 @@ import { fetchCollections } from '../services/collections.js';
 import { fetchServices } from '../services/services.js';
 
 export const getServices = async (req, res) => {
-  const { name, termsTypes } = req.query;
+  const { name: requestedName, termsTypes: requestedTermsTypes } = req.query;
 
   const collections = await fetchCollections();
 
@@ -19,12 +19,12 @@ export const getServices = async (req, res) => {
     }
 
     for (const service of services) {
-      if (!service.terms || (name && service.name !== name)) {
+      if (!service.terms || (requestedName && service.name !== requestedName)) {
         continue;
       }
 
       const serviceTermsTypes = service.terms.map(terms => terms.type);
-      const filteredServiceTermsTypes = termsTypes ? serviceTermsTypes.filter(serviceTermsType => termsTypes.includes(serviceTermsType)) : serviceTermsTypes;
+      const filteredServiceTermsTypes = requestedTermsTypes ? serviceTermsTypes.filter(serviceTermsType => requestedTermsTypes.includes(serviceTermsType)) : serviceTermsTypes;
 
       if (!filteredServiceTermsTypes.length) {
         continue;
