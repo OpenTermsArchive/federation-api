@@ -84,11 +84,11 @@ export const getService = async (req, res) => {
     });
   }));
 
-  if (!results.length) {
-    res.status(404).json({ error: 'Service not found' });
+  let status = 200;
 
-    return;
+  if (!results.length) {
+    status = 404;
   }
 
-  res.json({ results, failures });
+  res.status(status).json({ results, failures });
 };

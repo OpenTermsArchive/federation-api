@@ -383,6 +383,10 @@ describe('Services routes', () => {
       it('responds with 404 status code', () => {
         expect(response.status).to.equal(404);
       });
+
+      it('responds with an empty results array', () => {
+        expect(response.body.results).to.be.empty;
+      });
     });
   });
 });
