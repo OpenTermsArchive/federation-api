@@ -20,7 +20,7 @@ const fetch = async params => {
 
   checkStatus(response);
 
-  return response;
+  return response.json();
 };
 
 export default fetch;

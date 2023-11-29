@@ -3,9 +3,7 @@ import config from 'config';
 import fetch from '../utils/fetch.js';
 
 export const fetchCollections = async () => {
-  const response = await fetch(config.get('collectionsUrl'));
-
-  const collections = await response.json();
+  const collections = await fetch(config.get('collectionsUrl'));
 
   return Object.keys(collections).reduce((result, collectionName) => {
     if (collections[collectionName].endpoint) {
