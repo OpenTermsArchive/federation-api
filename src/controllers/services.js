@@ -10,7 +10,7 @@ export const getServices = async (req, res) => {
   const failures = [];
 
   await Promise.all(collections.map(async ({ id: collectionId, endpoint }) => {
-    const services = await fetchServices(endpoint).catch(error => {
+    let services = await fetchServices(endpoint).catch(error => {
       failures.push({ collection: collectionId, message: error.toString() });
     });
 
@@ -18,55 +18,23 @@ export const getServices = async (req, res) => {
       return;
     }
 
-    for (const service of services) {
-      if (!service.terms || (requestedName && !service.name.toLowerCase().includes(requestedName.toLowerCase()))) {
-        continue;
-      }
+    services = services.filter(service => service.terms); // If a collection API is under v0.33.0 terms can be undefined
 
-      const serviceTermsTypes = service.terms.map(terms => terms.type);
-      const filteredServiceTermsTypes = requestedTermsTypes ? serviceTermsTypes.filter(serviceTermsType => requestedTermsTypes.includes(serviceTermsType)) : serviceTermsTypes;
+    if (requestedName) {
+      services = services.filter(service => service.name.toLowerCase().includes(requestedName.toLowerCase()));
+    }
 
-      if (!filteredServiceTermsTypes.length) {
-        continue;
-      }
+    if (requestedTermsTypes) {
+      const requestedTermsTypesArray = [].concat(requestedTermsTypes); // when only one 'termTypes' query parameter is provided, Express parses it as a string; therefore, convert it to an array
 
-      results.push({
-        collection: collectionId,
-        service: {
-          id: service.id,
-          name: service.name,
-          url: `${endpoint}/service/${encodeURIComponent(service.id)}`,
-          termsTypes: filteredServiceTermsTypes,
-        },
+      services = services.filter(service => {
+        const matchingTerms = service.terms.filter(terms => requestedTermsTypesArray.includes(terms.type));
+
+        return matchingTerms.length == requestedTermsTypesArray.length;
       });
     }
-  }));
-
-  res.json({ results, failures });
-};
-
-export const getService = async (req, res) => {
-  const { serviceId } = req.params;
-
-  const collections = await fetchCollections();
-
-  const results = [];
-  const failures = [];
-
-  await Promise.all(collections.map(async ({ id: collectionId, endpoint }) => {
-    const services = await fetchServices(endpoint).catch(error => {
-      failures.push({ collection: collectionId, message: error.toString() });
-    });
-
-    if (!services) {
-      return;
-    }
 
     for (const service of services) {
-      if (service.id != serviceId) {
-        continue;
-      }
-
       results.push({
         collection: collectionId,
         service: {
@@ -79,8 +47,45 @@ export const getService = async (req, res) => {
     }
   }));
 
+  res.json({ results, failures });
+};
+
+export const getService = async (req, res) => {
+  const { serviceId: requestedServiceId } = req.params;
+
+  const collections = await fetchCollections();
+
+  const results = [];
+  const failures = [];
+
+  await Promise.all(collections.map(async collection => {
+    const services = await fetchServices(collection.endpoint).catch(error => {
+      failures.push({ collection: collection.id, message: error.toString() });
+    });
+
+    if (!services) {
+      return;
+    }
+
+    const service = services.find(service => service.id == requestedServiceId);
+
+    if (!service) {
+      return;
+    }
+
+    results.push({
+      collection: collection.id,
+      service: {
+        id: service.id,
+        name: service.name,
+        url: `${collection.endpoint}/service/${encodeURIComponent(service.id)}`,
+        termsTypes: service.terms?.map(terms => terms.type),
+      },
+    });
+  }));
+
   if (!results.length) {
-    res.status(404).json({error: 'Service not found'});
+    res.status(404).json({ error: 'Service not found' });
 
     return;
   }

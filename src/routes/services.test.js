@@ -181,19 +181,37 @@ describe('Services routes', () => {
       });
 
       context('with termsTypes query param', () => {
-        before(async () => {
-          response = await request(app).get(`${basePath}/services?termsTypes=Community%20Guidelines`);
+        context('with one matching terms types', () => {
+          before(async () => {
+            response = await request(app).get(`${basePath}/services?termsTypes=Community%20Guidelines`);
+          });
+
+          it('responds with 200 status code', () => {
+            expect(response.status).to.equal(200);
+          });
+
+          it('returns a results array with matching services based on the query parameter', () => {
+            expect(response.body).to.have.property('results').that.is.an('array');
+            expect(response.body.results).to.have.lengthOf(1);
+            expect(response.body.results[0].collection).to.equal('collection-2');
+            expect(response.body.results[0].service.id).to.equal('service-3');
+          });
         });
 
-        it('responds with 200 status code', () => {
-          expect(response.status).to.equal(200);
-        });
+        context('with an array of matching terms types', () => {
+          before(async () => {
+            response = await request(app).get(`${basePath}/services?termsTypes=Privacy%20Policy&termsTypes=Terms%20of%20Service`);
+          });
 
-        it('returns a results array with matching services based on the query parameter', () => {
-          expect(response.body).to.have.property('results').that.is.an('array');
-          expect(response.body.results).to.have.lengthOf(1);
-          expect(response.body.results[0].collection).to.equal('collection-2');
-          expect(response.body.results[0].service.id).to.equal('service-3');
+          it('responds with 200 status code', () => {
+            expect(response.status).to.equal(200);
+          });
+
+          it('returns a results array with matching services based on the query parameter', () => {
+            expect(response.body).to.have.property('results').that.is.an('array');
+            expect(response.body.results).to.have.lengthOf(2);
+            expect(response.body.results.map(({ service }) => service.id)).to.have.deep.members([ 'service-1', 'service-2' ]);
+          });
         });
 
         context('with non-matching termsTypes query param', () => {
