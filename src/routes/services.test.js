@@ -132,22 +132,39 @@ describe('Services routes', () => {
 
     describe('query params', () => {
       context('with name query param', () => {
-        before(async () => {
-          response = await request(app).get(`${basePath}/services?name=Service%202`);
+        context('when it matches a service name', () => {
+          before(async () => {
+            response = await request(app).get(`${basePath}/services?name=Service%202`);
+          });
+
+          it('responds with 200 status code', () => {
+            expect(response.status).to.equal(200);
+          });
+
+          it('returns a results array with matching services based on the query parameter', () => {
+            expect(response.body).to.have.property('results').that.is.an('array');
+            expect(response.body.results).to.have.lengthOf(1);
+            expect(response.body.results[0].collection).to.equal('collection-1');
+            expect(response.body.results[0].service.id).to.equal('service-2');
+          });
         });
 
-        it('responds with 200 status code', () => {
-          expect(response.status).to.equal(200);
+        context('when it does not full match a service name', () => {
+          before(async () => {
+            response = await request(app).get(`${basePath}/services?name=service`);
+          });
+
+          it('responds with 200 status code', () => {
+            expect(response.status).to.equal(200);
+          });
+
+          it('returns a results array with matching services based on the query parameter', () => {
+            expect(response.body).to.have.property('results').that.is.an('array');
+            expect(response.body.results).to.have.lengthOf(4);
+          });
         });
 
-        it('returns a results array with matching services based on the query parameter', () => {
-          expect(response.body).to.have.property('results').that.is.an('array');
-          expect(response.body.results).to.have.lengthOf(1);
-          expect(response.body.results[0].collection).to.equal('collection-1');
-          expect(response.body.results[0].service.id).to.equal('service-2');
-        });
-
-        context('with non-matching name query param', () => {
+        context('when it matches no services', () => {
           before(async () => {
             response = await request(app).get(`${basePath}/services?name=unknown%20name`);
           });

@@ -19,7 +19,7 @@ export const getServices = async (req, res) => {
     }
 
     for (const service of services) {
-      if (!service.terms || (requestedName && service.name !== requestedName)) {
+      if (!service.terms || (requestedName && !service.name.toLowerCase().includes(requestedName.toLowerCase()))) {
         continue;
       }
 
