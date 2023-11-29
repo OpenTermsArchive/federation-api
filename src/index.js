@@ -5,6 +5,7 @@ import 'express-async-errors';
 import errorsMiddleware from './middlewares/errors.js';
 import loggerMiddleware from './middlewares/logger.js';
 import apiRouter from './routes/index.js';
+import logger from './utils/logger.js';
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(errorsMiddleware);
 const port = config.get('port');
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  logger.info(`Server is running on http://localhost:${port}`);
 });
 
 export default app;
