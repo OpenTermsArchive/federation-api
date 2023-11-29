@@ -115,6 +115,7 @@ describe('Services routes', () => {
           it('has an url', () => {
             response.body.results.forEach(result => {
               expect(result.service).to.have.property('url').that.is.a('string');
+              expect(isValidURL(result.service.url)).to.be.true;
             });
           });
 
@@ -376,3 +377,13 @@ describe('Services routes', () => {
     });
   });
 });
+
+function isValidURL(input) {
+  try {
+    new URL(input); // eslint-disable-line no-new
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
