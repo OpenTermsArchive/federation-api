@@ -12,7 +12,7 @@ const COLLECTIONS_RESULT = {
   },
   'Collection 2': {
     id: 'collection-2',
-    endpoint: 'http://collection-2.example/api/v1',
+    endpoint: 'https://2.collection.example/api/v1',
   },
 };
 

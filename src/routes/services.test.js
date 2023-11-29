@@ -12,7 +12,7 @@ export const COLLECTIONS_RESULT = {
   },
   'Collection 2': {
     id: 'collection-2',
-    endpoint: 'http://collection-2.example/api/v1',
+    endpoint: 'https://2.collection.example/api/v1',
   },
 };
 
@@ -25,8 +25,8 @@ const COLLECTION_1_SERVICES_RESULT = [
     ],
   },
   {
-    id: 'service-2',
-    name: 'Service 2',
+    id: 'Service with Chinese characters',
+    name: '抖音短视频',
     terms: [
       { type: 'Terms of Service' },
       { type: 'Privacy Policy' },
@@ -44,8 +44,8 @@ const COLLECTION_2_SERVICES_RESULT = [
     ],
   },
   {
-    id: 'service-3',
-    name: 'Service 3',
+    id: '%',
+    name: '%',
     terms: [
       { type: 'Community Guidelines' },
     ],
@@ -53,10 +53,12 @@ const COLLECTION_2_SERVICES_RESULT = [
 ];
 
 describe('Services routes', () => {
+  const serviceWithChineseCharactersNameEncodedForUrl = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
+
   before(() => {
     nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
     nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-    nock('http://collection-2.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+    nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
 
   after(() => {
@@ -79,7 +81,7 @@ describe('Services routes', () => {
         expect(response.type).to.equal('application/json');
       });
 
-      it('returns an non empty results array', () => {
+      it('returns a non empty results array', () => {
         expect(response.body).to.have.property('results').that.is.an('array');
         expect(response.body.results).to.not.be.empty;
       });
@@ -104,7 +106,7 @@ describe('Services routes', () => {
             });
           });
 
-          it('has an name', () => {
+          it('has a name', () => {
             response.body.results.forEach(result => {
               expect(result.service).to.have.property('name').that.is.a('string');
             });
@@ -134,7 +136,7 @@ describe('Services routes', () => {
       context('with name query param', () => {
         context('when it matches a service name', () => {
           before(async () => {
-            response = await request(app).get(`${BASE_PATH}/services?name=Service%202`);
+            response = await request(app).get(`${BASE_PATH}/services?name=${serviceWithChineseCharactersNameEncodedForUrl}`);
           });
 
           it('responds with 200 status code', () => {
@@ -145,7 +147,7 @@ describe('Services routes', () => {
             expect(response.body).to.have.property('results').that.is.an('array');
             expect(response.body.results).to.have.lengthOf(1);
             expect(response.body.results[0].collection).to.equal('collection-1');
-            expect(response.body.results[0].service.id).to.equal('service-2');
+            expect(response.body.results[0].service.id).to.equal('Service with Chinese characters');
           });
         });
 
@@ -160,7 +162,7 @@ describe('Services routes', () => {
 
           it('returns a results array with matching services based on the query parameter', () => {
             expect(response.body).to.have.property('results').that.is.an('array');
-            expect(response.body.results).to.have.lengthOf(4);
+            expect(response.body.results).to.have.lengthOf(2);
           });
         });
 
@@ -194,7 +196,7 @@ describe('Services routes', () => {
             expect(response.body).to.have.property('results').that.is.an('array');
             expect(response.body.results).to.have.lengthOf(1);
             expect(response.body.results[0].collection).to.equal('collection-2');
-            expect(response.body.results[0].service.id).to.equal('service-3');
+            expect(response.body.results[0].service.id).to.equal('%');
           });
         });
 
@@ -216,7 +218,7 @@ describe('Services routes', () => {
 
       context('with both name and termsType query params', () => {
         before(async () => {
-          response = await request(app).get(`${BASE_PATH}/services?name=Service%202&termsType=Privacy%20Policy`);
+          response = await request(app).get(`${BASE_PATH}/services?name=${serviceWithChineseCharactersNameEncodedForUrl}&termsType=Privacy%20Policy`);
         });
 
         it('responds with 200 status code', () => {
@@ -227,7 +229,7 @@ describe('Services routes', () => {
           expect(response.body).to.have.property('results').that.is.an('array');
           expect(response.body.results).to.have.lengthOf(1);
           expect(response.body.results[0].collection).to.equal('collection-1');
-          expect(response.body.results[0].service.id).to.equal('service-2');
+          expect(response.body.results[0].service.id).to.equal('Service with Chinese characters');
         });
       });
     });
@@ -237,7 +239,7 @@ describe('Services routes', () => {
         nock.cleanAll();
         nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
         nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-        nock('http://collection-2.example').get('/api/v1/services').replyWithError({
+        nock('https://2.collection.example').get('/api/v1/services').replyWithError({
           message: 'something went wrong',
           code: 'ERROR',
         });
@@ -287,7 +289,7 @@ describe('Services routes', () => {
 
     before(async () => {
       nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-      nock('http://collection-2.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+      nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
       response = await request(app).get(`${BASE_PATH}/service/service-1`);
     });
 
@@ -299,7 +301,7 @@ describe('Services routes', () => {
       expect(response.type).to.equal('application/json');
     });
 
-    it('returns an non empty results array', () => {
+    it('returns a non empty results array', () => {
       expect(response.body).to.have.property('results').that.is.an('array');
       expect(response.body.results).to.not.be.empty;
     });
@@ -337,7 +339,7 @@ describe('Services routes', () => {
 
           const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
-          expect(resultCollection2.service).to.have.property('url').that.is.equal('http://collection-2.example/api/v1/service/service-1');
+          expect(resultCollection2.service).to.have.property('url').that.is.equal('https://2.collection.example/api/v1/service/service-1');
         });
 
         it('has the proper array of termsTypes', () => {
