@@ -6,7 +6,7 @@ This module provides a federated API that allows easy querying of the distribute
 
 For a high-level overview of Open Terms Archive’s wider goals and processes, please read its [public homepage](https://opentermsarchive.org).
 
-For documentation, visit [docs.opentermsarchive.org](https://docs.opentermsarchive.org/)
+For documentation, visit [docs.opentermsarchive.org](https://docs.opentermsarchive.org/).
 
 - - -
 
