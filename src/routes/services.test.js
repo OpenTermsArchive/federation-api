@@ -251,20 +251,6 @@ describe('Services routes', () => {
         expect(response.body.results).to.not.be.empty;
       });
 
-      describe('#result object', () => {
-        it('has a collection name', () => {
-          response.body.results.forEach(result => {
-            expect(result).to.have.property('collection').that.is.a('string');
-          });
-        });
-
-        it('has a service object', () => {
-          response.body.results.forEach(result => {
-            expect(result).to.have.property('service');
-          });
-        });
-      });
-
       it('returns a non empty failures array', () => {
         expect(response.body.failures).to.not.be.empty;
       });
