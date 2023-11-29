@@ -18,7 +18,7 @@ export const getServices = async (req, res) => {
       return;
     }
 
-    services = services.filter(service => service.terms); // If a collection API is under v0.33.0 terms can be undefined
+    services = services.filter(service => service.terms); // `terms` could be undefined in cases where the targeted collection has its deployed API version under v0.33.0
 
     if (requestedName) {
       services = services.filter(service => service.name.toLowerCase().includes(requestedName.toLowerCase()));
