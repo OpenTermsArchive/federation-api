@@ -8,11 +8,11 @@ import app, { BASE_PATH } from '../index.js';
 const COLLECTIONS_RESULT = {
   'Collection 1': {
     id: 'collection-1',
-    endpoint: 'http://collection-1.org/api/v1',
+    endpoint: 'http://collection-1.example/api/v1',
   },
   'Collection 2': {
     id: 'collection-2',
-    endpoint: 'http://collection-2.org/api/v1',
+    endpoint: 'http://collection-2.example/api/v1',
   },
 };
 

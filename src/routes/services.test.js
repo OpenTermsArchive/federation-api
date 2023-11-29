@@ -8,11 +8,11 @@ import app, { BASE_PATH } from '../index.js';
 export const COLLECTIONS_RESULT = {
   'Collection 1': {
     id: 'collection-1',
-    endpoint: 'http://collection-1.org/api/v1',
+    endpoint: 'http://collection-1.example/api/v1',
   },
   'Collection 2': {
     id: 'collection-2',
-    endpoint: 'http://collection-2.org/api/v1',
+    endpoint: 'http://collection-2.example/api/v1',
   },
 };
 
@@ -55,8 +55,8 @@ const COLLECTION_2_SERVICES_RESULT = [
 describe('Services routes', () => {
   before(() => {
     nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
-    nock('http://collection-1.org').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-    nock('http://collection-2.org').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+    nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+    nock('http://collection-2.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
 
   after(() => {
@@ -180,7 +180,7 @@ describe('Services routes', () => {
         });
       });
 
-      context('with termsTypes query param', () => {
+      context('with termsType query param', () => {
         context('with one matching terms types', () => {
           before(async () => {
             response = await request(app).get(`${BASE_PATH}/services?termsType=Community%20Guidelines`);
@@ -198,7 +198,7 @@ describe('Services routes', () => {
           });
         });
 
-        context('with non-matching termsTypes query param', () => {
+        context('with non-matching termsType query param', () => {
           before(async () => {
             response = await request(app).get(`${BASE_PATH}/services?termsType=unknown%20type`);
           });
@@ -214,7 +214,7 @@ describe('Services routes', () => {
         });
       });
 
-      context('with both name and termsTypes query params', () => {
+      context('with both name and termsType query params', () => {
         before(async () => {
           response = await request(app).get(`${BASE_PATH}/services?name=Service%202&termsType=Privacy%20Policy`);
         });
@@ -236,8 +236,8 @@ describe('Services routes', () => {
       before(async () => {
         nock.cleanAll();
         nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
-        nock('http://collection-1.org').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-        nock('http://collection-2.org').get('/api/v1/services').replyWithError({
+        nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+        nock('http://collection-2.example').get('/api/v1/services').replyWithError({
           message: 'something went wrong',
           code: 'ERROR',
         });
@@ -286,8 +286,8 @@ describe('Services routes', () => {
     let response;
 
     before(async () => {
-      nock('http://collection-1.org').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-      nock('http://collection-2.org').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+      nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+      nock('http://collection-2.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
       response = await request(app).get(`${BASE_PATH}/service/service-1`);
     });
 
@@ -333,11 +333,11 @@ describe('Services routes', () => {
         it('has the proper url', () => {
           const [resultCollection1] = response.body.results.filter(result => result.collection == 'collection-1');
 
-          expect(resultCollection1.service).to.have.property('url').that.is.equal('http://collection-1.org/api/v1/service/service-1');
+          expect(resultCollection1.service).to.have.property('url').that.is.equal('http://collection-1.example/api/v1/service/service-1');
 
           const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
-          expect(resultCollection2.service).to.have.property('url').that.is.equal('http://collection-2.org/api/v1/service/service-1');
+          expect(resultCollection2.service).to.have.property('url').that.is.equal('http://collection-2.example/api/v1/service/service-1');
         });
 
         it('has the proper array of termsTypes', () => {
