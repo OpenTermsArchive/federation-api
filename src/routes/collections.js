@@ -14,11 +14,11 @@ const router = express.Router();
  * @swagger
  * /collections:
  *   get:
- *     summary: Enumerate all collections.
+ *     summary: List all collections federated by the Open Terms Archive core team.
  *     tags: [Collections]
  *     responses:
  *       '200':
- *         description: A JSON array of all collections.
+ *         description: A JSON array of all federated collections.
  *         content:
  *           application/json:
  *             schema:
@@ -34,7 +34,8 @@ const router = express.Router();
  *                     description: The name of the collection.
  *                   endpoint:
  *                     type: string
- *                     description: The URL for the collection endpoint.
+ *                     format: url
+ *                     description: The URL at which the API of that collection can be queried.
  */
 router.get('/collections', getCollections);
 
