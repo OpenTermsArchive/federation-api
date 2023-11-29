@@ -2,7 +2,7 @@ import { fetchCollections } from '../services/collections.js';
 import { fetchServices } from '../services/services.js';
 
 export const getServices = async (req, res) => {
-  const { name: requestedName, termsTypes: requestedTermsTypes } = req.query;
+  const { name: requestedName, termsType: requestedTermsType } = req.query;
 
   const collections = await fetchCollections();
 
@@ -24,14 +24,8 @@ export const getServices = async (req, res) => {
       services = services.filter(service => service.name.toLowerCase().includes(requestedName.toLowerCase()));
     }
 
-    if (requestedTermsTypes) {
-      const requestedTermsTypesArray = [].concat(requestedTermsTypes); // when only one 'termTypes' query parameter is provided, Express parses it as a string; therefore, convert it to an array
-
-      services = services.filter(service => {
-        const matchingTerms = service.terms.filter(terms => requestedTermsTypesArray.includes(terms.type));
-
-        return matchingTerms.length == requestedTermsTypesArray.length;
-      });
+    if (requestedTermsType) {
+      services = services.filter(service => service.terms.find(terms => requestedTermsType.includes(terms.type)));
     }
 
     for (const service of services) {

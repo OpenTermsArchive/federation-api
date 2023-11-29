@@ -43,10 +43,10 @@ const router = express.Router();
  *           type: string
  *         description: The string to search for in service names.
  *       - in: query
- *         name: termsTypes
+ *         name: termsType
  *         schema:
  *           type: string
- *         description: The parameter for specifying desired term types in the search. This parameter can be specified multiple times, all provided values will be used in the search.
+ *         description: The parameter for specifying desired term type in the search.
  *     tags: [Services]
  *     produces:
  *       - application/json

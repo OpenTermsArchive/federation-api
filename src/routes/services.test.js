@@ -183,7 +183,7 @@ describe('Services routes', () => {
       context('with termsTypes query param', () => {
         context('with one matching terms types', () => {
           before(async () => {
-            response = await request(app).get(`${BASE_PATH}/services?termsTypes=Community%20Guidelines`);
+            response = await request(app).get(`${BASE_PATH}/services?termsType=Community%20Guidelines`);
           });
 
           it('responds with 200 status code', () => {
@@ -198,25 +198,9 @@ describe('Services routes', () => {
           });
         });
 
-        context('with an array of matching terms types', () => {
-          before(async () => {
-            response = await request(app).get(`${BASE_PATH}/services?termsTypes=Privacy%20Policy&termsTypes=Terms%20of%20Service`);
-          });
-
-          it('responds with 200 status code', () => {
-            expect(response.status).to.equal(200);
-          });
-
-          it('returns a results array with matching services based on the query parameter', () => {
-            expect(response.body).to.have.property('results').that.is.an('array');
-            expect(response.body.results).to.have.lengthOf(2);
-            expect(response.body.results.map(({ service }) => service.id)).to.have.deep.members([ 'service-1', 'service-2' ]);
-          });
-        });
-
         context('with non-matching termsTypes query param', () => {
           before(async () => {
-            response = await request(app).get(`${BASE_PATH}/services?termsTypes=unknown%20type`);
+            response = await request(app).get(`${BASE_PATH}/services?termsType=unknown%20type`);
           });
 
           it('responds with 200 status code', () => {
@@ -232,7 +216,7 @@ describe('Services routes', () => {
 
       context('with both name and termsTypes query params', () => {
         before(async () => {
-          response = await request(app).get(`${BASE_PATH}/services?name=Service%202&termsTypes=Privacy%20Policy`);
+          response = await request(app).get(`${BASE_PATH}/services?name=Service%202&termsType=Privacy%20Policy`);
         });
 
         it('responds with 200 status code', () => {
