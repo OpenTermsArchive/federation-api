@@ -2,9 +2,8 @@ import express from 'express';
 import helmet from 'helmet';
 
 import collectionsRouter from './collections.js';
-import servicesRouter from './services.js';
 import docsRouter from './docs.js';
-
+import servicesRouter from './services.js';
 
 export default function apiRouter(basePath) {
   const router = express.Router();

@@ -1,9 +1,7 @@
 import { expect } from 'chai';
-import config from 'config';
 import request from 'supertest';
 
 import app, { basePath } from '../index.js';
-
 
 describe('Docs API', () => {
   describe('GET /docs', () => {

@@ -61,7 +61,7 @@ describe('Services routes', () => {
 
   after(() => {
     nock.cleanAll();
-  })
+  });
 
   describe('GET /services', () => {
     let response;

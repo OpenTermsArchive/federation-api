@@ -23,7 +23,7 @@ describe('Collections routes', () => {
 
   after(() => {
     nock.cleanAll();
-  })
+  });
 
   describe('GET /collections', () => {
     let response;

@@ -9,8 +9,8 @@ export const fetchCollections = async () => {
 
   return Object.keys(collections).reduce((accumulator, collectionName) => {
     if (collections[collectionName].endpoint) {
-      accumulator.push({ 
-        name: collectionName, 
+      accumulator.push({
+        name: collectionName,
         id: collections[collectionName].id,
         endpoint: collections[collectionName].endpoint,
       });
