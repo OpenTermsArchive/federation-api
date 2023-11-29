@@ -1,6 +1,6 @@
 {
   "port": 3333,
-  "collectionsUrl": "http://opentermsarchive.org/collections.json",
+  "collectionsUrl": "https://opentermsarchive.org/collections.json",
   "logger": {
     "smtp": {
       "host": "smtp-relay.sendinblue.com",
