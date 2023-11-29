@@ -40,7 +40,7 @@ describe('Collections routes', () => {
       expect(response.type).to.equal('application/json');
     });
 
-    it('returns an non empty array of collections', () => {
+    it('returns a non empty array of collections', () => {
       expect(response.body).to.be.an('array');
       expect(response.body).to.not.be.empty;
     });

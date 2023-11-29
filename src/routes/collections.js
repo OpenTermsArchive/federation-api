@@ -6,7 +6,7 @@ import { getCollections } from '../controllers/collections.js';
  * @swagger
  * tags:
  *   name: Collections
- *   description: Collections API
+ *   description: Collections endpoint
  */
 const router = express.Router();
 

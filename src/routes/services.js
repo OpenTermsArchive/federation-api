@@ -6,7 +6,7 @@ import { getServices, getService } from '../controllers/services.js';
  * @swagger
  * tags:
  *   name: Services
- *   description: Services API
+ *   description: Services endpoint
  * components:
  *   schemas:
  *     Service:
@@ -35,7 +35,7 @@ const router = express.Router();
  * @swagger
  * /services:
  *   get:
- *     summary: Get matching services based on name and termsTypes query params.
+ *     summary: Get all services across federated collections that match a specific service name or that track a specific terms type.
  *     parameters:
  *       - in: query
  *         name: name
@@ -46,7 +46,7 @@ const router = express.Router();
  *         name: termsType
  *         schema:
  *           type: string
- *         description: The parameter for specifying desired term type in the search.
+ *         description: Term type that should be tracked by the matching service declarations.
  *     tags: [Services]
  *     produces:
  *       - application/json
@@ -78,7 +78,7 @@ const router = express.Router();
  *                        description: The id of the collection.
  *                      message:
  *                        type: string
- *                        description: An explanation of the failure.
+ *                        description: The raw error message of the failure that occurred.
  */
 router.get('/services', getServices);
 
@@ -94,10 +94,10 @@ router.get('/services', getServices);
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the service.
+ *         description: The service ID used to filter.
  *     responses:
  *       200:
- *         description: A JSON object containing a results array of the specific service identified by the given ID across all collections and a failures array.
+ *         description: A JSON object containing an array of results with the declarations of the given service ID across all collections, and an array of failures potentially encountered when querying the federated collections.
  *         content:
  *           application/json:
  *             schema:
@@ -123,7 +123,7 @@ router.get('/services', getServices);
  *                        description: The id of the collection.
  *                      message:
  *                        type: string
- *                        description: An explanation of the failure.
+ *                        description: The raw message error of the failure that occurred.
  */
 router.get('/service/:serviceId', getService);
 

@@ -20,7 +20,7 @@ if (config.get('logger.sendMailOnError')) {
     password: process.env.SMTP_PASSWORD,
     ssl: true,
     timeout: 30 * 1000,
-    formatter: args => args[Object.getOwnPropertySymbols(args)[1]], // Returns the full error message, the same visible in the console. It is referenced in the argument object with a Symbol of which we do not have the reference but we know it is the second one.
+    formatter: args => args[Object.getOwnPropertySymbols(args)[1]], // Returns the full error message, the same that is visible in the console. It is referenced in the argument object with a Symbol of which we do not have the reference to but we know it is the second one.
     exitOnError: true,
     level: 'error',
     subject: `[OTA Federeated API] Error Report — ${os.hostname()}`,

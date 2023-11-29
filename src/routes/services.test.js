@@ -86,7 +86,7 @@ describe('Services routes', () => {
         expect(response.body.results).to.not.be.empty;
       });
 
-      describe('each #result object', () => {
+      describe('each result object', () => {
         it('has a collection name', () => {
           response.body.results.forEach(result => {
             expect(result).to.have.property('collection').that.is.a('string');
@@ -99,7 +99,7 @@ describe('Services routes', () => {
           });
         });
 
-        describe('#service object', () => {
+        describe('service object', () => {
           it('has an id', () => {
             response.body.results.forEach(result => {
               expect(result.service).to.have.property('id').that.is.a('string');
@@ -269,14 +269,14 @@ describe('Services routes', () => {
         expect(response.body.failures).to.not.be.empty;
       });
 
-      describe('#failure object', () => {
-        it('has a collection name', () => {
+      describe('failure entries', () => {
+        it('have a collection name', () => {
           response.body.failures.forEach(failure => {
             expect(failure).to.have.property('collection').that.is.an('string');
           });
         });
 
-        it('has a detailed error message', () => {
+        it('have a detailed error message', () => {
           response.body.failures.forEach(failure => {
             expect(failure).to.have.property('message').that.is.an('string');
           });
@@ -307,7 +307,7 @@ describe('Services routes', () => {
       expect(response.body.results).to.not.be.empty;
     });
 
-    describe('each #result object', () => {
+    describe('each result object', () => {
       it('has a collection name', () => {
         response.body.results.forEach(result => {
           expect(result).to.have.property('collection').that.is.a('string');

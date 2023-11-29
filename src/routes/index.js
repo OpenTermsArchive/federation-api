@@ -17,7 +17,7 @@ export default function apiRouter(basePath) {
       useDefaults: false,
       directives: defaultDirectives,
     },
-  })); // Do not enable `upgrade-insecure-requests` directive set by Helmet for docs routes to ensure insecure requests won't be upgraded to secure requests for swaggerUI assets; see https://github.com/center-for-threat-informed-defense/attack-workbench-rest-api/issues/96#issuecomment-924193910 and https://github.com/scottie1984/swagger-ui-express/issues/212#issuecomment-825803088
+  })); // Do not enable `upgrade-insecure-requests` directive set by Helmet for docs routes to ensure insecure requests won't be upgraded to secure requests for Swagger UI assets; see https://github.com/center-for-threat-informed-defense/attack-workbench-rest-api/issues/96#issuecomment-924193910 and https://github.com/scottie1984/swagger-ui-express/issues/212#issuecomment-825803088
 
   router.use(docsRouter(basePath));
 
