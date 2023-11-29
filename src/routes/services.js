@@ -130,6 +130,11 @@ router.get('/services', getServices);
  *                      message:
  *                        type: string
  *                        description: The raw message error of the failure that occurred.
+ *       '400':
+ *         description: Bad request due to invalid serviceId format.
+ *         externalDocs:
+ *           description: Open Terms Archive documentation
+ *           url: https://docs.opentermsarchive.org/contributing-terms/#service-id
  */
 router.get('/service/:serviceId', getService);
 

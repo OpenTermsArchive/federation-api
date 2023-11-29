@@ -361,6 +361,16 @@ describe('Services routes', () => {
         expect(response.body.results).to.be.empty;
       });
     });
+
+    context('when an invalid service ID is given', () => {
+      before(async () => {
+        response = await request(app).get(`${BASE_PATH}/service/service:`);
+      });
+
+      it('responds with 400 status code', () => {
+        expect(response.status).to.equal(400);
+      });
+    });
   });
 });
 

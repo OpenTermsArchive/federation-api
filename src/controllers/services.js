@@ -1,5 +1,5 @@
 import { fetchCollections } from '../services/collections.js';
-import { fetchServices } from '../services/services.js';
+import { fetchServices, isServiceIDValid } from '../services/services.js';
 
 export const getServices = async (req, res) => {
   const { name: requestedName, termsType: requestedTermsType } = req.query;
@@ -46,6 +46,10 @@ export const getServices = async (req, res) => {
 
 export const getService = async (req, res) => {
   const { serviceId: requestedServiceId } = req.params;
+
+  if (!isServiceIDValid(requestedServiceId)) {
+    return res.status(400).json();
+  }
 
   const collections = await fetchCollections();
 
