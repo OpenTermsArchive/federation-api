@@ -32,6 +32,13 @@ const COLLECTION_1_SERVICES_RESULT = [
       { type: 'Privacy Policy' },
     ],
   },
+  {
+    id: 'cAsInG',
+    name: 'cAsInG',
+    terms: [
+      { type: 'Copyright Claims Policy' },
+    ],
+  },
 ];
 
 const COLLECTION_2_SERVICES_RESULT = [
@@ -48,6 +55,13 @@ const COLLECTION_2_SERVICES_RESULT = [
     name: '%',
     terms: [
       { type: 'Community Guidelines' },
+    ],
+  },
+  {
+    id: 'casing',
+    name: 'casing',
+    terms: [
+      { type: 'Copyright Claims Policy' },
     ],
   },
 ];
@@ -155,6 +169,21 @@ describe('Services routes', () => {
         context('when it does not full match a service name', () => {
           before(async () => {
             response = await request(app).get(`${BASE_PATH}/services?name=service`);
+          });
+
+          it('responds with 200 status code', () => {
+            expect(response.status).to.equal(200);
+          });
+
+          it('returns a results array with matching services based on the query parameter', () => {
+            expect(response.body).to.have.property('results').that.is.an('array');
+            expect(response.body.results).to.have.lengthOf(2);
+          });
+        });
+
+        context('when there is a case-sensitive collision in service names', () => {
+          before(async () => {
+            response = await request(app).get(`${BASE_PATH}/services?name=Casing`);
           });
 
           it('responds with 200 status code', () => {
