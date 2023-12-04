@@ -1,9 +1,13 @@
-// Adapted from the example provided in the node-fetch documentation on handling client and server errors. See https://github.com/node-fetch/node-fetch#handling-client-and-server-errors.
+// Adapted from the examples provided in the node-fetch documentation:
+// - Handling client and server errors: See https://github.com/node-fetch/node-fetch#handling-client-and-server-errors.
+// - Request cancellation with AbortSignal: https://github.com/node-fetch/node-fetch#request-cancellation-with-abortsignal.
 import nodeFetch from 'node-fetch';
 
-class HTTPResponseError extends Error {
+export const DEFAULT_TIMEOUT = 2000;
+
+export class HTTPResponseError extends Error {
   constructor(response) {
-    super(`HTTP Error Response: ${response.status} ${response.statusText}`);
+    super(`HTTP Error Response: ${response.status} ${response.statusText}`.trim());
     this.response = response;
   }
 }
@@ -16,12 +20,21 @@ export const checkStatus = response => {
   throw new HTTPResponseError(response);
 };
 
-const fetch = async params => {
-  const response = await nodeFetch(params);
+const fetch = async (url, options, timeout = DEFAULT_TIMEOUT) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, timeout);
 
-  checkStatus(response);
+  try {
+    const response = await nodeFetch(url, { ...options, signal: controller.signal });
 
-  return response.json();
+    checkStatus(response);
+
+    return response.json();
+  } finally {
+    clearTimeout(timeoutId);
+  }
 };
 
 export default fetch;
