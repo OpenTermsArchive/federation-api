@@ -9,6 +9,8 @@ describe('isServiceIDValid', () => {
     'with exclamation mark': 'service!',
     'with question mark': 'service?',
     'with dash': 'service-',
+    'with semi-colon': 'service;',
+    'with coma': 'service,',
   };
 
   const invalidServiceIDs = {
