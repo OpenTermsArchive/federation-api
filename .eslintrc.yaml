@@ -100,3 +100,4 @@ rules:
   new-cap:
     - error
     - properties: false
+  linebreak-style: 0 
