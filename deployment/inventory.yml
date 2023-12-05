@@ -1,0 +1,5 @@
+all:
+  hosts:
+    51.89.136.45:
+      ansible_user: debian
+      ed25519_fingerprint: AAAAC3NzaC1lZDI1NTE5AAAAIH4W+tXldwd5ZUgMh60t+unUWME8PVLP3h+ToDhwrc1t
