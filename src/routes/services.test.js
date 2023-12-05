@@ -141,7 +141,7 @@ describe('Services routes', () => {
         });
       });
 
-      it('returns an emtpy failures array', () => {
+      it('returns an empty failures array', () => {
         expect(response.body).to.have.property('failures').that.is.an('array');
         expect(response.body.failures).to.be.empty;
       });
@@ -166,7 +166,7 @@ describe('Services routes', () => {
           });
         });
 
-        context('when it does not full match a service name', () => {
+        context('when it does not fully match a service name', () => {
           before(async () => {
             response = await request(app).get(`${BASE_PATH}/services?name=service`);
           });
@@ -293,7 +293,7 @@ describe('Services routes', () => {
 
         it('have a detailed error message', () => {
           response.body.failures.forEach(failure => {
-            expect(failure).to.have.property('message').that.is.an('string');
+            expect(failure).to.have.property('message').that.has.string('something went wrong');
           });
         });
       });
@@ -338,24 +338,24 @@ describe('Services routes', () => {
       describe('each service object', () => {
         it('has the proper id', () => {
           response.body.results.forEach(result => {
-            expect(result.service).to.have.property('id').that.is.equal('service-1');
+            expect(result.service).to.have.property('id').that.equals('service-1');
           });
         });
 
         it('has the proper name', () => {
           response.body.results.forEach(result => {
-            expect(result.service).to.have.property('name').that.is.equal('Service 1');
+            expect(result.service).to.have.property('name').that.equals('Service 1');
           });
         });
 
         it('has the proper url', () => {
           const [resultCollection1] = response.body.results.filter(result => result.collection == 'collection-1');
 
-          expect(resultCollection1.service).to.have.property('url').that.is.equal('http://collection-1.example/api/v1/service/service-1');
+          expect(resultCollection1.service).to.have.property('url').that.equals('http://collection-1.example/api/v1/service/service-1');
 
           const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
-          expect(resultCollection2.service).to.have.property('url').that.is.equal('https://2.collection.example/api/v1/service/service-1');
+          expect(resultCollection2.service).to.have.property('url').that.equals('https://2.collection.example/api/v1/service/service-1');
         });
 
         it('has the proper array of termsTypes', () => {
@@ -372,7 +372,7 @@ describe('Services routes', () => {
       });
     });
 
-    it('returns an emtpy failures array', () => {
+    it('returns an empty failures array', () => {
       expect(response.body).to.have.property('failures').that.is.an('array');
       expect(response.body.failures).to.be.empty;
     });
