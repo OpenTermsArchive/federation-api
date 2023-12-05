@@ -11,6 +11,11 @@ describe('isServiceIDValid', () => {
     'with dash': 'service-',
     'with semi-colon': 'service;',
     'with comma': 'service,',
+    'with underscore': 'service_',
+    'with plus sign': 'service+',
+    'with minus sign': 'service-',
+    'with single quote': 'service\'',
+    'with double quote': 'service"',
   };
 
   const invalidServiceIDs = {

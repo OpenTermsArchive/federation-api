@@ -1,6 +1,6 @@
 import fetch from '../utils/fetch.js';
 
-const SERVICE_ID_VALIDATION_REGEX = /^[a-zA-Z0-9\s\-'.!;,\?]+$/; // eslint-disable-line no-useless-escape
+const SERVICE_ID_VALIDATION_REGEX = /^[?!;'"_+.,a-zA-Z0-9\s\-]+$/; // eslint-disable-line no-useless-escape
 
 export async function fetchServices(endpoint) {
   return fetch(`${endpoint}/services`);
