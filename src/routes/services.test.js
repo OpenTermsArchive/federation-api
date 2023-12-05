@@ -286,9 +286,7 @@ describe('Services routes', () => {
 
       describe('failure entries', () => {
         it('have a collection name', () => {
-          response.body.failures.forEach(failure => {
-            expect(failure).to.have.property('collection').that.is.an('string');
-          });
+          expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
         });
 
         it('have a detailed error message', () => {
