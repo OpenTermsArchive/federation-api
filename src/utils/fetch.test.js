@@ -10,7 +10,6 @@ describe('Fetch', () => {
 
       const result = await fetch('https://example.com');
 
-      // Assert the result or any other expectations
       expect(result).to.deep.equal({ data: 'success' });
 
       scope.done();
