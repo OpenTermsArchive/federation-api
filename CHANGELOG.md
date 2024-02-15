@@ -10,7 +10,7 @@ _Full changeset and discussions: [#3](https://github.com/OpenTermsArchive/engine
 
 ### Added
 
-- Add warning log for disabled Logger mailer due to missing config
+- Log a warning in case log emails cannot be sent because of a missing config
 
 ## 0.1.0 - 2023-12-05
 
