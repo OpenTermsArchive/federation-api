@@ -21,8 +21,10 @@ const logger = winston.createLogger({
   rejectionHandlers: transports,
 });
 
-if (process.env.SMTP_PASSWORD) {
-  if (config.get('logger.sendMailOnError')) {
+if (config.get('logger.sendMailOnError')) {
+  if (process.env.SMTP_PASSWORD) {
+    logger.warn('Environment variable "SMTP_PASSWORD" was not found; log emails cannot be sent');
+  } else {
     transports.push(new winston.transports.Mail({
       to: config.get('logger.sendMailOnError.to'),
       from: config.get('logger.sendMailOnError.from'),
@@ -41,11 +43,7 @@ if (process.env.SMTP_PASSWORD) {
       transports,
       rejectionHandlers: transports,
     });
-  } else {
-    logger.warn('Configuration key "logger.sendMailOnError" was not found; the mailer feature of the Logger module won\'t be enabled');
   }
-} else {
-  logger.warn('Environment variable "SMTP_PASSWORD" was not found; the mailer feature of the Logger module won\'t be enabled');
 }
 
 export default logger;
