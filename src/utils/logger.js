@@ -22,7 +22,7 @@ const logger = winston.createLogger({
 });
 
 if (config.get('logger.sendMailOnError')) {
-  if (process.env.SMTP_PASSWORD) {
+  if (process.env.SMTP_PASSWORD === undefined) {
     logger.warn('Environment variable "SMTP_PASSWORD" was not found; log emails cannot be sent');
   } else {
     transports.push(new winston.transports.Mail({
