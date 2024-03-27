@@ -1,19 +1,32 @@
-import config from 'config';
-
 import fetch from '../utils/fetch.js';
 
-export const fetchCollections = async () => {
-  const collections = await fetch(config.get('@opentermsarchive/federation-api.collectionsUrl'));
+export const fetchCollections = async collectionsConfig => {
+  let collections = [];
 
-  return Object.keys(collections).reduce((result, collectionName) => {
-    if (collections[collectionName].endpoint) {
-      result.push({
-        name: collectionName,
-        id: collections[collectionName].id,
-        endpoint: collections[collectionName].endpoint,
-      });
+  for (const item of collectionsConfig) {
+    if (typeof item === 'string') {
+      /* eslint-disable no-await-in-loop */
+      const fetchedCollections = await fetch(item); // Use `await` to ensure sequential fetching of collections and preserve the order in the resulting collections array
+
+      /* eslint-enable no-await-in-loop */
+
+      collections = collections.concat(fetchedCollections.filter(collection => collection.id && collection.name && collection.endpoint));
     }
 
-    return result;
-  }, []);
+    if (typeof item === 'object' && item.id && item.name && item.endpoint) {
+      collections.push(item);
+    }
+  }
+
+  return removeDuplicatesKeepLatest(collections);
 };
+
+export function removeDuplicatesKeepLatest(collections) {
+  const uniqueCollections = {};
+
+  collections.forEach(collection => {
+    uniqueCollections[collection.id] = collection;
+  });
+
+  return Object.values(uniqueCollections);
+}

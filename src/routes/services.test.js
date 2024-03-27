@@ -1,20 +1,21 @@
 import { expect } from 'chai';
-import config from 'config';
 import nock from 'nock';
 import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
 
-export const COLLECTIONS_RESULT = {
-  'Collection 1': {
+export const COLLECTIONS_RESULT = [
+  {
+    name: 'Collection 1',
     id: 'collection-1',
     endpoint: 'http://collection-1.example/api/v1',
   },
-  'Collection 2': {
+  {
+    name: 'Collection 2',
     id: 'collection-2',
     endpoint: 'https://2.collection.example/api/v1',
   },
-};
+];
 
 const COLLECTION_1_SERVICES_RESULT = [
   {
@@ -70,7 +71,7 @@ describe('Services routes', () => {
   const serviceWithUrlEncodedChineseCharactersName = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
 
   before(() => {
-    nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
+    nock('https://opentermsarchive.org/collections.json').persist().get('').reply(200, COLLECTIONS_RESULT);
     nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
     nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
@@ -267,7 +268,7 @@ describe('Services routes', () => {
     context('when an error occurs in one of the underlying collections', () => {
       before(async () => {
         nock.cleanAll();
-        nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
+        nock('https://opentermsarchive.org/collections.json').persist().get('').reply(200, COLLECTIONS_RESULT);
         nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
         nock('https://2.collection.example').get('/api/v1/services').replyWithError({
           message: 'something went wrong',
