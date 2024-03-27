@@ -3,7 +3,7 @@ import nock from 'nock';
 
 import fetch, { HTTPResponseError, DEFAULT_TIMEOUT } from './fetch.js';
 
-describe('Fetch', () => {
+describe('Utils: Fetch', () => {
   describe('Response parsing', () => {
     it('parses response as JSON', async () => {
       const scope = nock('https://example.com').get('/').reply(200, { data: 'success' });

@@ -17,7 +17,7 @@ const COLLECTIONS_RESULT = [
   },
 ];
 
-describe('Collections routes', () => {
+describe('Routes: Collections', () => {
   before(() => {
     nock('https://opentermsarchive.org/collections.json').persist().get('').reply(200, COLLECTIONS_RESULT);
   });

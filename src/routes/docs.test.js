@@ -3,7 +3,7 @@ import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
 
-describe('Docs API', () => {
+describe('Routes: Docs', () => {
   describe('GET /docs', () => {
     let response;
 
