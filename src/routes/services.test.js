@@ -67,7 +67,7 @@ const COLLECTION_2_SERVICES_RESULT = [
   },
 ];
 
-describe('Services routes', () => {
+describe('Routes: Services', () => {
   const serviceWithUrlEncodedChineseCharactersName = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
 
   before(() => {
