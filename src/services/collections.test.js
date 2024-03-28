@@ -11,7 +11,7 @@ describe('Services: Collections', () => {
   const COLLECTION_2_OVERRIDEN = { id: COLLECTION_2.id, name: 'Override Collection 2', endpoint: 'http://domain2.example/endpoint' };
 
   describe('removeDuplicatesKeepLatest', () => {
-    it('removes duplicates based on their id and keep the latest defined', () => {
+    it('removes duplicates based on their id and keeps the latest defined', () => {
       const collections = [ COLLECTION_1, COLLECTION_2, COLLECTION_2_OVERRIDEN, COLLECTION_3 ];
       const uniqueCollections = removeDuplicatesKeepLatest(collections);
 
