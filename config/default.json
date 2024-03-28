@@ -1,13 +1,13 @@
 {
-  "port": 3333,
-  "collections": [
-    "https://opentermsarchive.org/collections.json"
-  ],
   "logger": {
     "smtp": {
       "host": "smtp-relay.sendinblue.com",
       "username": "admin@opentermsarchive.org"
     },
     "sendMailOnError": false
-  }
+  },
+  "port": 3333,
+  "collections": [
+    "https://opentermsarchive.org/collections.json"
+  ]
 }
