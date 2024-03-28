@@ -1,4 +1,5 @@
 import fetch from '../utils/fetch.js';
+import logger from '../utils/logger.js';
 
 export const fetchCollections = async collectionsConfig => {
   let collections = [];
@@ -9,14 +10,15 @@ export const fetchCollections = async collectionsConfig => {
       const fetchedCollections = await fetch(item); // Use `await` to ensure sequential fetching of collections and preserve the order in the resulting collections array
 
       /* eslint-enable no-await-in-loop */
-
-      collections = collections.concat(fetchedCollections.filter(collection => collection.id && collection.name && collection.endpoint));
+      collections = collections.concat(fetchedCollections);
     }
 
-    if (typeof item === 'object' && item.id && item.name && item.endpoint) {
+    if (typeof item === 'object') {
       collections.push(item);
     }
   }
+
+  collections = filterInvalidCollections(collections);
 
   return removeDuplicatesKeepLatest(collections);
 };
@@ -29,4 +31,16 @@ export function removeDuplicatesKeepLatest(collections) {
   });
 
   return Object.values(uniqueCollections);
+}
+
+export function filterInvalidCollections(collections) {
+  return collections.filter(collection => {
+    const isCollectionValid = collection.id && collection.name && collection.endpoint;
+
+    if (!isCollectionValid) {
+      logger.warn(`Ignore the following collection lacking mandatory fields 'id', 'name', or 'endpoint': \n${JSON.stringify(collection, null, 4)}`);
+    }
+
+    return isCollectionValid;
+  });
 }
