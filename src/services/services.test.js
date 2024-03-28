@@ -4,7 +4,7 @@ import { isServiceIDValid } from './services.js';
 
 describe('Services: Services', () => {
   describe('isServiceIDValid', () => {
-    const validServiceIDs = {
+    const VALID_SERVICE_IDS = {
       'with only alphanumeric': 'service',
       'with dot': 'servi.ce',
       'with exclamation mark': 'service!',
@@ -19,7 +19,7 @@ describe('Services: Services', () => {
       'with double quote': 'service"',
     };
 
-    const invalidServiceIDs = {
+    const INVALID_SERVICE_IDS = {
       'with ideograms': 'service抖',
       'with cyrillic': 'serviceД',
       'with accented letter': 'sérvice',
@@ -33,7 +33,7 @@ describe('Services: Services', () => {
     };
 
     context('for valid service IDs', () => {
-      Object.entries(validServiceIDs).forEach(([ description, serviceID ]) => {
+      Object.entries(VALID_SERVICE_IDS).forEach(([ description, serviceID ]) => {
         context(`${description}`, () => {
           it('returns true', () => {
             const result = isServiceIDValid(serviceID);
@@ -45,7 +45,7 @@ describe('Services: Services', () => {
     });
 
     context('for invalid service IDs', () => {
-      Object.entries(invalidServiceIDs).forEach(([ description, serviceID ]) => {
+      Object.entries(INVALID_SERVICE_IDS).forEach(([ description, serviceID ]) => {
         context(`${description}`, () => {
           it('returns false', () => {
             const result = isServiceIDValid(serviceID);
