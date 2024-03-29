@@ -22,66 +22,84 @@ describe('Services: Collections', () => {
 
       expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_2, COLLECTION_3 ]);
     });
-  });
 
-  context('when there are duplicates', () => {
-    it('removes duplicates', async () => {
-      nock('http://domain1.example')
-        .get('/collections.json')
-        .reply(200, [ COLLECTION_1, COLLECTION_2 ]);
+    context('when there are duplicates', () => {
+      it('removes duplicates', async () => {
+        nock('http://domain1.example')
+          .get('/collections.json')
+          .reply(200, [ COLLECTION_1, COLLECTION_2 ]);
 
-      const config = [
-        'http://domain1.example/collections.json',
-        COLLECTION_1_OVERRIDEN,
-      ];
-
-      expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1_OVERRIDEN, COLLECTION_2 ]);
-    });
-  });
-
-  context('with collections lacking mandatory fields', () => {
-    context('when "id" is missing', () => {
-      it('removes invalid collection', async () => {
         const config = [
-          COLLECTION_1,
-          {
-            name: 'Invalid collection',
-            endpoint: 'http://domain1.example/endpoint',
-          },
-          COLLECTION_3,
+          'http://domain1.example/collections.json',
+          COLLECTION_1_OVERRIDEN,
         ];
 
-        expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+        expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1_OVERRIDEN, COLLECTION_2 ]);
       });
     });
 
-    context('when "name" is missing', () => {
-      it('removes invalid collection', async () => {
-        const config = [
-          COLLECTION_1,
-          {
-            id: 'invalid-collection',
-            endpoint: 'http://domain1.example/endpoint',
-          },
-          COLLECTION_3,
-        ];
+    context('with invalid collections', () => {
+      context('when mandatory fields are missing', () => {
+        context('when "id" is missing', () => {
+          it('removes invalid collection', async () => {
+            const config = [
+              COLLECTION_1,
+              {
+                name: 'Invalid collection',
+                endpoint: 'http://domain1.example/endpoint',
+              },
+              COLLECTION_3,
+            ];
 
-        expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+            expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+          });
+        });
+
+        context('when "name" is missing', () => {
+          it('removes invalid collection', async () => {
+            const config = [
+              COLLECTION_1,
+              {
+                id: 'invalid-collection',
+                endpoint: 'http://domain1.example/endpoint',
+              },
+              COLLECTION_3,
+            ];
+
+            expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+          });
+        });
+
+        context('when "endpoint" is missing', () => {
+          it('removes invalid collection', async () => {
+            const config = [
+              COLLECTION_1,
+              {
+                id: 'invalid-collection',
+                name: 'Invalid collection',
+              },
+              COLLECTION_3,
+            ];
+
+            expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+          });
+        });
       });
-    });
 
-    context('when "endpoint" is missing', () => {
-      it('removes invalid collection', async () => {
-        const config = [
-          COLLECTION_1,
-          {
-            id: 'invalid-collection',
-            name: 'Invalid collection',
-          },
-          COLLECTION_3,
-        ];
+      context('when endpoint is not a valid URL ', () => {
+        it('removes invalid collection', async () => {
+          const config = [
+            COLLECTION_1,
+            {
+              id: 'invalid-endpoint',
+              name: 'Invalid collection endpoint',
+              endpoint: 'no url endoint',
+            },
+            COLLECTION_3,
+          ];
 
-        expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+          expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+        });
       });
     });
   });
