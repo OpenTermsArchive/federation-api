@@ -29,19 +29,19 @@ export const fetchCollections = async collectionsConfig => {
 
 export function filterInvalidCollections(collections) {
   return collections.filter(collection => {
-    const haveMandatoryFields = collection.id && collection.name && collection.endpoint;
+    const hasMandatoryFields = collection.id && collection.name && collection.endpoint;
 
-    if (!haveMandatoryFields) {
+    if (!hasMandatoryFields) {
       logger.warn(`Ignore the following collection lacking mandatory fields 'id', 'name', or 'endpoint': \n${JSON.stringify(collection, null, 4)}`);
     }
 
     const isEndpointValidUrl = isURL(collection.endpoint);
 
     if (!isEndpointValidUrl) {
-      logger.warn(`Ignore the following collection as 'endpoint' is not valid URL: \n${JSON.stringify(collection, null, 4)}`);
+      logger.warn(`Ignore the following collection as 'endpoint' is not a valid URL: \n${JSON.stringify(collection, null, 4)}`);
     }
 
-    return haveMandatoryFields && isEndpointValidUrl;
+    return hasMandatoryFields && isEndpointValidUrl;
   });
 }
 
