@@ -4,9 +4,9 @@ import fetch from '../utils/fetch.js';
 import logger from '../utils/logger.js';
 
 export const fetchCollections = async collectionsConfig => {
-  const unqiueCollections = new Map();
+  const uniqueCollections = new Map();
 
-  const result = await Promise.allSettled(collectionsConfig.map(async item => {
+  (await Promise.allSettled(collectionsConfig.map(async item => {
     let collections = [];
 
     if (typeof item === 'string') {
@@ -18,11 +18,13 @@ export const fetchCollections = async collectionsConfig => {
     }
 
     return filterInvalidCollections(collections);
-  }));
+  }))).forEach(({ value }) => {
+    value.forEach(collection => {
+      uniqueCollections.set(collection.id, collection);
+    });
+  });
 
-  result.forEach(({ value }) => value.forEach(collection => unqiueCollections.set(collection.id, collection)));
-
-  return Array.from(unqiueCollections.values());
+  return Array.from(uniqueCollections.values());
 };
 
 export function filterInvalidCollections(collections) {
