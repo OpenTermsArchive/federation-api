@@ -2,36 +2,26 @@ import fetch from '../utils/fetch.js';
 import logger from '../utils/logger.js';
 
 export const fetchCollections = async collectionsConfig => {
-  let collections = [];
+  const unqiueCollections = new Map();
 
-  for (const item of collectionsConfig) {
+  const result = await Promise.allSettled(collectionsConfig.map(async item => {
+    let collections = [];
+
     if (typeof item === 'string') {
-      /* eslint-disable no-await-in-loop */
-      const fetchedCollections = await fetch(item); // Use `await` to ensure sequential fetching of collections and preserve the order in the resulting collections array
-
-      /* eslint-enable no-await-in-loop */
-      collections = collections.concat(fetchedCollections);
+      collections = await fetch(item);
     }
 
     if (typeof item === 'object') {
-      collections.push(item);
+      collections = [item];
     }
-  }
 
-  collections = filterInvalidCollections(collections);
+    return filterInvalidCollections(collections);
+  }));
 
-  return removeDuplicatesKeepLatest(collections);
+  result.forEach(({ value }) => value.forEach(collection => unqiueCollections.set(collection.id, collection)));
+
+  return Array.from(unqiueCollections.values());
 };
-
-export function removeDuplicatesKeepLatest(collections) {
-  const uniqueCollections = {};
-
-  collections.forEach(collection => {
-    uniqueCollections[collection.id] = collection;
-  });
-
-  return Object.values(uniqueCollections);
-}
 
 export function filterInvalidCollections(collections) {
   return collections.filter(collection => {
