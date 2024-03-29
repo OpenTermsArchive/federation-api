@@ -1,23 +1,13 @@
 import { expect } from 'chai';
 import nock from 'nock';
 
-import { fetchCollections, removeDuplicatesKeepLatest } from './collections.js';
+import { fetchCollections } from './collections.js';
 
 describe('Services: Collections', () => {
   const COLLECTION_1 = { id: 'collection1', name: 'Collection 1', endpoint: 'http://domain1.example/endpoint' };
   const COLLECTION_2 = { id: 'collection2', name: 'Collection 2', endpoint: 'http://domain1.example/endpoint' };
   const COLLECTION_3 = { id: 'collection3', name: 'Collection 3', endpoint: 'http://domain1.example/endpoint' };
   const COLLECTION_1_OVERRIDEN = { id: COLLECTION_1.id, name: 'Override Collection 1', endpoint: 'http://domain2.example/endpoint' };
-  const COLLECTION_2_OVERRIDEN = { id: COLLECTION_2.id, name: 'Override Collection 2', endpoint: 'http://domain2.example/endpoint' };
-
-  describe('removeDuplicatesKeepLatest', () => {
-    it('removes duplicates based on their id and keeps the latest defined', () => {
-      const collections = [ COLLECTION_1, COLLECTION_2, COLLECTION_2_OVERRIDEN, COLLECTION_3 ];
-      const uniqueCollections = removeDuplicatesKeepLatest(collections);
-
-      expect(uniqueCollections).to.deep.equal([ COLLECTION_1, COLLECTION_2_OVERRIDEN, COLLECTION_3 ]);
-    });
-  });
 
   describe('fetchCollections', () => {
     it('fetches collections from URLs and includes directly given collections', async () => {
