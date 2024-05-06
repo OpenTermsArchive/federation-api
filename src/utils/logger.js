@@ -21,15 +21,15 @@ const logger = winston.createLogger({
   rejectionHandlers: transports,
 });
 
-if (config.get('logger.sendMailOnError')) {
+if (config.get('@opentermsarchive/federated-api.logger.sendMailOnError')) {
   if (process.env.SMTP_PASSWORD === undefined) {
     logger.warn('Environment variable "SMTP_PASSWORD" was not found; log emails cannot be sent');
   } else {
     transports.push(new winston.transports.Mail({
-      to: config.get('logger.sendMailOnError.to'),
-      from: config.get('logger.sendMailOnError.from'),
-      host: config.get('logger.smtp.host'),
-      username: config.get('logger.smtp.username'),
+      to: config.get('@opentermsarchive/federated-api.logger.sendMailOnError.to'),
+      from: config.get('@opentermsarchive/federated-api.logger.sendMailOnError.from'),
+      host: config.get('@opentermsarchive/federated-api.logger.smtp.host'),
+      username: config.get('@opentermsarchive/federated-api.logger.smtp.username'),
       password: process.env.SMTP_PASSWORD,
       ssl: true,
       timeout: 30 * 1000,

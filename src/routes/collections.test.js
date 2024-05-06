@@ -18,7 +18,7 @@ const COLLECTIONS_RESULT = {
 
 describe('Collections routes', () => {
   before(() => {
-    nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
+    nock(config.get('@opentermsarchive/federated-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
   });
 
   after(() => {

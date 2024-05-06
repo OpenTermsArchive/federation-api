@@ -1,9 +1,11 @@
 {
-  "port": 3333,
-  "logger": {
-    "sendMailOnError": {
-      "from": "noreply@opentermsarchive.org",
-      "to": "admin@opentermsarchive.org"
+  "@opentermsarchive/federated-api": {
+    "port": 3333,
+    "logger": {
+      "sendMailOnError": {
+        "from": "noreply@opentermsarchive.org",
+        "to": "admin@opentermsarchive.org"
+      }
     }
   }
 }

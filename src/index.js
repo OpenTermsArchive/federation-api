@@ -17,7 +17,7 @@ export const BASE_PATH = '/v1';
 
 app.use(BASE_PATH, apiRouter(BASE_PATH));
 app.use(errorsMiddleware);
-const port = config.get('port');
+const port = config.get('@opentermsarchive/federated-api.port');
 
 app.listen(port, () => {
   logger.info(`Server is running on http://localhost:${port}`);
