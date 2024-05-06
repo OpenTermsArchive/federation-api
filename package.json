@@ -1,6 +1,7 @@
 {
   "name": "@opentermsarchive/federated-api",
   "version": "0.1.1",
+  "description": "Open Terms Archive federation API to easy querying the distributed database",
   "homepage": "https://github.com/OpenTermsArchive/federated-api#readme",
   "bugs": {
     "url": "https://github.com/OpenTermsArchive/federated-api/issues"
@@ -11,12 +12,16 @@
   },
   "license": "EUPL-1.2",
   "type": "module",
+  "bin": {
+    "ota-federated-api": "./bin/ota-federated-api.js"
+  },
   "scripts": {
     "lint": "eslint .",
     "start": "node -r dotenv/config src/index.js",
     "test": "cross-env NODE_ENV=test mocha --recursive \"./src/**/*.test.js\" --exit"
   },
   "dependencies": {
+    "commander": "^9.4.1",
     "config": "^3.3.9",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
