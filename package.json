@@ -13,7 +13,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "start": "node src/index.js",
+    "start": "node -r dotenv/config src/index.js",
     "test": "cross-env NODE_ENV=test mocha --recursive \"./src/**/*.test.js\" --exit"
   },
   "dependencies": {
