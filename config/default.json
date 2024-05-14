@@ -1,5 +1,5 @@
 {
-  "@opentermsarchive/federated-api": {
+  "@opentermsarchive/federation-api": {
     "collectionsUrl": "https://opentermsarchive.org/collections.json",
     "logger": {
       "smtp": {

@@ -16,7 +16,7 @@ _Full changeset and discussions: [#3](https://github.com/OpenTermsArchive/engine
 
 ## 0.1.0 - 2023-12-05
 
-_Full changeset and discussions: [#1](https://github.com/OpenTermsArchive/federated-api/pull/1)._
+_Full changeset and discussions: [#1](https://github.com/OpenTermsArchive/federation-api/pull/1)._
 
 > Development of this release was [supported](https://nlnet.nl/project/TOSDR-OTA/) by the [NGI0 Entrust Fund](https://nlnet.nl/entrust), a fund established by [NLnet](https://nlnet.nl/) with financial support from the European Commission's [Next Generation Internet](https://www.ngi.eu) programme, under the aegis of DG CNECT under grant agreement N°101069594.
 

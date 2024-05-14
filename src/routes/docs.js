@@ -13,7 +13,7 @@ function specsRouter(basePath) {
     definition: {
       openapi: '3.1.0',
       info: {
-        title: 'Open Terms Archive Federated API',
+        title: 'Open Terms Archive Federation API',
         version: '1.0.0',
         license: {
           name: 'EUPL-1.2',

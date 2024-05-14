@@ -13,12 +13,12 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(loggerMiddleware);
 }
 
-export const BASE_PATH = `/${config.get('@opentermsarchive/federated-api.basePath')}/v1`.replace(/\/\/+/g, '/'); // ensure there are no double slashes
+export const BASE_PATH = `/${config.get('@opentermsarchive/federation-api.basePath')}/v1`.replace(/\/\/+/g, '/'); // ensure there are no double slashes
 
 app.use(BASE_PATH, apiRouter(BASE_PATH));
 app.use(errorsMiddleware);
 
-const PORT = config.get('@opentermsarchive/federated-api.port');
+const PORT = config.get('@opentermsarchive/federation-api.port');
 
 app.listen(PORT, () => {
   logger.info(`Start Open Terms Archive Federation API on http://localhost:${PORT}${BASE_PATH}`);

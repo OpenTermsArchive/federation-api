@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    uses: "OpenTermsArchive/federated-api/.github/workflows/test.yml@main"
+    uses: "OpenTermsArchive/federation-api/.github/workflows/test.yml@main"
 
   deploy:
     needs: [ test ]
