@@ -1,8 +1,8 @@
-# Open Terms Archive Federated API
+# Open Terms Archive Federation API
 
 Open Terms Archive is a decentralised system that tracks collections of services' terms across multiple servers. Each collection operates its own API which exposes services and terms tracked, but the decentralisation of these APIs implies to search across all of them to identify which and where services and terms are tracked.
 
-This module provides a federated API that allows easy querying of the distributed database, facilitating collaboration with external applications.
+This module provides a federation API that allows easy querying of the distributed database, facilitating collaboration with external applications.
 
 For a high-level overview of Open Terms Archive’s wider goals and processes, please read its [public homepage](https://opentermsarchive.org).
 

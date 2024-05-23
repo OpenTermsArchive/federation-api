@@ -9,9 +9,9 @@ on:
 
 jobs:
   changelog:
-    uses: "OpenTermsArchive/federated-api/.github/workflows/changelog.yml@main"
+    uses: "OpenTermsArchive/federation-api/.github/workflows/changelog.yml@main"
   test:
-    uses: "OpenTermsArchive/federated-api/.github/workflows/test.yml@main"
+    uses: "OpenTermsArchive/federation-api/.github/workflows/test.yml@main"
   release:
     if: github.event.pull_request.merged == true
     needs: [ changelog, test ]
@@ -70,3 +70,8 @@ jobs:
           tag_name: ${{ env.NEW_VERSION }}
           body: ${{ steps.get-changelog.outputs.changelog }}
           token: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
+
+      - name: Publish to NPM public repository
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPMJS_ACCESS_TOKEN }}

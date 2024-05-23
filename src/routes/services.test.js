@@ -70,7 +70,7 @@ describe('Services routes', () => {
   const serviceWithUrlEncodedChineseCharactersName = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
 
   before(() => {
-    nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
+    nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
     nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
     nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
@@ -267,7 +267,7 @@ describe('Services routes', () => {
     context('when an error occurs in one of the underlying collections', () => {
       before(async () => {
         nock.cleanAll();
-        nock(config.get('collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
+        nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
         nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
         nock('https://2.collection.example').get('/api/v1/services').replyWithError({
           message: 'something went wrong',

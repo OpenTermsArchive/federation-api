@@ -3,7 +3,7 @@ import config from 'config';
 import fetch from '../utils/fetch.js';
 
 export const fetchCollections = async () => {
-  const collections = await fetch(config.get('collectionsUrl'));
+  const collections = await fetch(config.get('@opentermsarchive/federation-api.collectionsUrl'));
 
   return Object.keys(collections).reduce((result, collectionName) => {
     if (collections[collectionName].endpoint) {
