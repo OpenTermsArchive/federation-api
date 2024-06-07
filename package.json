@@ -18,7 +18,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node -r dotenv/config src/index.js",
-    "test": "cross-env NODE_ENV=test mocha --recursive \"./src/**/*.test.js\" --exit"
+    "test": "cross-env NODE_ENV=test mocha --require test/helper.js --recursive \"./src/**/*.test.js\" --exit"
   },
   "dependencies": {
     "commander": "^9.4.1",

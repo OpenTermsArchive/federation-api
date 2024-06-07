@@ -86,14 +86,14 @@ describe('Services: Collections', () => {
         });
       });
 
-      context('when endpoint is not a valid URL ', () => {
+      context('when endpoint is not a valid URL', () => {
         it('removes invalid collection', async () => {
           const config = [
             COLLECTION_1,
             {
               id: 'invalid-endpoint',
               name: 'Invalid collection endpoint',
-              endpoint: 'no url endoint',
+              endpoint: 'no url endpoint',
             },
             COLLECTION_3,
           ];

@@ -4,19 +4,6 @@ import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
 
-export const COLLECTIONS_RESULT = [
-  {
-    name: 'Collection 1',
-    id: 'collection-1',
-    endpoint: 'http://collection-1.example/api/v1',
-  },
-  {
-    name: 'Collection 2',
-    id: 'collection-2',
-    endpoint: 'https://2.collection.example/api/v1',
-  },
-];
-
 const COLLECTION_1_SERVICES_RESULT = [
   {
     id: 'service-1',
@@ -67,11 +54,11 @@ const COLLECTION_2_SERVICES_RESULT = [
   },
 ];
 
+// Use the global HTTP request mock for the URL 'https://opentermsarchive.org/collections.json' defined in 'test/helpers.js'
 describe('Routes: Services', () => {
   const serviceWithUrlEncodedChineseCharactersName = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
 
-  before(() => {
-    nock('https://opentermsarchive.org/collections.json').persist().get('').reply(200, COLLECTIONS_RESULT);
+  before(async () => {
     nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
     nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
@@ -268,7 +255,6 @@ describe('Routes: Services', () => {
     context('when an error occurs in one of the underlying collections', () => {
       before(async () => {
         nock.cleanAll();
-        nock('https://opentermsarchive.org/collections.json').persist().get('').reply(200, COLLECTIONS_RESULT);
         nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
         nock('https://2.collection.example').get('/api/v1/services').replyWithError({
           message: 'something went wrong',

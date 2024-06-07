@@ -1,31 +1,9 @@
 import { expect } from 'chai';
-import nock from 'nock';
 import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
 
-const COLLECTIONS_RESULT = [
-  {
-    name: 'Collection 1',
-    id: 'collection-1',
-    endpoint: 'http://collection-1.example/api/v1',
-  },
-  {
-    name: 'Collection 2',
-    id: 'collection-2',
-    endpoint: 'https://2.collection.example/api/v1',
-  },
-];
-
 describe('Routes: Collections', () => {
-  before(() => {
-    nock('https://opentermsarchive.org/collections.json').persist().get('').reply(200, COLLECTIONS_RESULT);
-  });
-
-  after(() => {
-    nock.cleanAll();
-  });
-
   describe('GET /collections', () => {
     let response;
 
