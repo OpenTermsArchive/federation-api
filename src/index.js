@@ -26,7 +26,7 @@ const collections = await fetchCollections(config.get('@opentermsarchive/federat
   process.exit(1);
 });
 
-if (collections.length == 0) {
+if (!collections.length) {
   logger.error('No valid collection declared, the process will exit as this API cannot fulfil any request');
   process.exit(2);
 }
