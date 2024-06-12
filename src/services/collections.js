@@ -23,12 +23,21 @@ export async function fetchCollections(collectionsConfig) {
       collections = [definition];
     }
 
-    return filterInvalidCollections(collections);
-  }))).forEach(({ value, reason }) => {
-    if (reason) {
-      return errors.push(reason);
+    return collections;
+  }))).forEach(({ value: collections, reason: rejectionReason }) => {
+    if (rejectionReason) {
+      return errors.push(rejectionReason);
     }
-    value.forEach(collection => {
+
+    collections.forEach(collection => {
+      const validationErrors = validateCollection(collection);
+
+      if (validationErrors.length) {
+        logger.warn(`Ignore collection "${JSON.stringify(collection)}" due to following errors: \n- ${validationErrors.join('\n- ')}`);
+
+        return;
+      }
+
       uniqueCollections.set(collection.id, collection);
     });
   });
@@ -40,32 +49,26 @@ export async function fetchCollections(collectionsConfig) {
   return Array.from(uniqueCollections.values());
 }
 
-function filterInvalidCollections(collections) {
-  return collections.filter(collection => {
-    const hasMandatoryFields = collection.id && collection.name && collection.endpoint;
+export function validateCollection(collection) {
+  const errors = [];
 
-    const errors = [];
+  const hasMandatoryFields = collection.id && collection.name && collection.endpoint;
 
-    if (!hasMandatoryFields) {
-      errors.push('lack mandatory fields "id", "name", or "endpoint"');
+  if (!hasMandatoryFields) {
+    errors.push('lack mandatory fields "id", "name", or "endpoint"');
+  }
+
+  let isEndpointValidUrl = true;
+
+  if (collection.endpoint) {
+    isEndpointValidUrl = isURL(collection.endpoint);
+
+    if (!isEndpointValidUrl) {
+      errors.push('the endpoint is not a valid URL');
     }
+  }
 
-    let isEndpointValidUrl = true;
-
-    if (collection.endpoint) {
-      isEndpointValidUrl = isURL(collection.endpoint);
-
-      if (!isEndpointValidUrl) {
-        errors.push('the endpoint is not a valid URL');
-      }
-    }
-
-    if (errors.length) {
-      logger.warn(`Ignore collection "${JSON.stringify(collection)}" due to following errors: \n- ${errors.join('\n- ')}`);
-    }
-
-    return hasMandatoryFields && isEndpointValidUrl;
-  });
+  return errors;
 }
 
 function isURL(string) {

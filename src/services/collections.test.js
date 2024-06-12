@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import nock from 'nock';
 
-import { fetchCollections } from './collections.js';
+import { fetchCollections, validateCollection } from './collections.js';
 
 const COLLECTION_1 = {
   id: 'collection1',
@@ -56,67 +56,88 @@ describe('Services: Collections', () => {
     });
 
     context('with invalid collections', () => {
-      context('when mandatory fields are missing', () => {
-        context('when "id" is missing', () => {
-          it('removes invalid collection', async () => {
-            const config = [
-              COLLECTION_1,
-              {
-                name: 'Invalid collection',
-                endpoint: 'http://domain1.example/endpoint',
-              },
-              COLLECTION_3,
-            ];
+      it('removes collections with errors', async () => {
+        const config = [
+          COLLECTION_1,
+          {
+            name: 'Invalid collection',
+            endpoint: 'http://domain1.example/endpoint',
+          },
+          {
+            id: 'invalid-collection',
+            endpoint: 'http://domain1.example/endpoint',
+          },
+          {
+            id: 'invalid-collection',
+            name: 'Invalid collection',
+          },
+          {
+            id: 'invalid-endpoint',
+            name: 'Invalid collection endpoint',
+            endpoint: 'no url endpoint',
+          },
+          COLLECTION_3,
+        ];
 
-            expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
-          });
-        });
+        expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
+      });
+    });
+  });
 
-        context('when "name" is missing', () => {
-          it('removes invalid collection', async () => {
-            const config = [
-              COLLECTION_1,
-              {
-                id: 'invalid-collection',
-                endpoint: 'http://domain1.example/endpoint',
-              },
-              COLLECTION_3,
-            ];
+  describe('validateCollection', () => {
+    it('validates a collection with all mandatory fields', () => {
+      const collection = {
+        id: 'valid-collection',
+        name: 'Valid Collection',
+        endpoint: 'http://valid.example/endpoint',
+      };
+      const errors = validateCollection(collection);
 
-            expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
-          });
-        });
+      expect(errors).to.be.empty;
+    });
 
-        context('when "endpoint" is missing', () => {
-          it('removes invalid collection', async () => {
-            const config = [
-              COLLECTION_1,
-              {
-                id: 'invalid-collection',
-                name: 'Invalid collection',
-              },
-              COLLECTION_3,
-            ];
+    context('when mandatory fields are missing', () => {
+      it('returns error when "id" is missing', () => {
+        const collection = {
+          name: 'Invalid collection',
+          endpoint: 'http://invalid.example/endpoint',
+        };
+        const errors = validateCollection(collection);
 
-            expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
-          });
-        });
+        expect(errors).to.include('lack mandatory fields "id", "name", or "endpoint"');
       });
 
-      context('when endpoint is not a valid URL', () => {
-        it('removes invalid collection', async () => {
-          const config = [
-            COLLECTION_1,
-            {
-              id: 'invalid-endpoint',
-              name: 'Invalid collection endpoint',
-              endpoint: 'no url endpoint',
-            },
-            COLLECTION_3,
-          ];
+      it('returns error when "name" is missing', () => {
+        const collection = {
+          id: 'invalid-collection',
+          endpoint: 'http://invalid.example/endpoint',
+        };
+        const errors = validateCollection(collection);
 
-          expect(await fetchCollections(config)).to.deep.equal([ COLLECTION_1, COLLECTION_3 ]);
-        });
+        expect(errors).to.include('lack mandatory fields "id", "name", or "endpoint"');
+      });
+
+      it('returns error when "endpoint" is missing', () => {
+        const collection = {
+          id: 'invalid-collection',
+          name: 'Invalid collection',
+        };
+        const errors = validateCollection(collection);
+
+        expect(errors).to.include('lack mandatory fields "id", "name", or "endpoint"');
+      });
+    });
+
+    context('when endpoint is not a valid URL', () => {
+      it('returns error for invalid URL endpoint', () => {
+        const collection = {
+          id: 'invalid-endpoint',
+          name: 'Invalid collection endpoint',
+          endpoint: 'no url endpoint',
+        };
+        const errors = validateCollection(collection);
+
+        expect(errors).to.include('the endpoint is not a valid URL');
       });
     });
   });
