@@ -10,7 +10,7 @@ _Full changeset and discussions: [#4](https://github.com/OpenTermsArchive/engine
 
 ### Changed
 
-- **Breaking:** Replaced `collectionsUrl` config entry with `collections` key, now supporting both URLs and directly specified collections. Refer to the [configuration documentation](https://docs.opentermsarchive.org/api/federated/#configuring) for details.
+- **Breaking:** Support arbitrary collections as sources; rename `collectionsUrl` config entry into `collections` and wrap it in an array, refer to the [documentation](https://docs.opentermsarchive.org/api/federated/#configuring) for details
 
 ## 1.0.0 - 2024-05-23
 
