@@ -1,26 +1,26 @@
 import { URL } from 'url';
 
-import fetch from '../utils/fetch.js';
+import fetchAsJSON from '../utils/fetch.js';
 import logger from '../utils/logger.js';
 
 export async function fetchCollections(collectionsConfig) {
   const errors = [];
   const uniqueCollections = new Map();
 
-  (await Promise.allSettled(collectionsConfig.map(async item => {
+  (await Promise.allSettled(collectionsConfig.map(async definition => {
     let collections = [];
 
-    if (typeof item === 'string') {
-      collections = await fetch(item).catch(error => {
-        throw new Error(`${error.message} when fetching ${item}`);
+    if (typeof definition === 'string') {
+      collections = await fetchAsJSON(definition).catch(error => {
+        throw new Error(`${error.message} when fetching ${definition}`);
       });
       if (!Array.isArray(collections)) {
-        throw new Error(`Invalid format; an array of collections is expected when fetching ${item}`);
+        throw new Error(`Invalid format; an array of collections is expected when fetching ${definition}`);
       }
     }
 
-    if (typeof item === 'object') {
-      collections = [item];
+    if (typeof definition === 'object') {
+      collections = [definition];
     }
 
     return filterInvalidCollections(collections);

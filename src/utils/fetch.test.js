@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import nock from 'nock';
 
-import fetch, { HTTPResponseError, DEFAULT_TIMEOUT } from './fetch.js';
+import fetchAsJSON, { HTTPResponseError, DEFAULT_TIMEOUT } from './fetch.js';
 
 describe('Utils: Fetch', () => {
   describe('Response parsing', () => {
     it('parses response as JSON', async () => {
       const scope = nock('https://example.com').get('/').reply(200, { data: 'success' });
 
-      const result = await fetch('https://example.com');
+      const result = await fetchAsJSON('https://example.com');
 
       expect(result).to.deep.equal({ data: 'success' });
 
@@ -22,7 +22,7 @@ describe('Utils: Fetch', () => {
         const scope = nock('https://example.com').get('/').reply(404);
 
         try {
-          await fetch('https://example.com');
+          await fetchAsJSON('https://example.com');
         } catch (error) {
           expect(error).to.be.an.instanceOf(HTTPResponseError);
         }
@@ -35,7 +35,7 @@ describe('Utils: Fetch', () => {
         const scope = nock('https://example.com').get('/').reply(502);
 
         try {
-          await fetch('https://example.com');
+          await fetchAsJSON('https://example.com');
         } catch (error) {
           expect(error).to.be.an.instanceOf(HTTPResponseError);
         }
@@ -52,7 +52,7 @@ describe('Utils: Fetch', () => {
       const scope = nock('https://example.com').get('/').delayConnection(DEFAULT_TIMEOUT + 100).reply(200, { data: 'success' }); // Simulate a delay of 3000ms
 
       try {
-        await fetch('https://example.com', {});
+        await fetchAsJSON('https://example.com', {});
       } catch (error) {
         expect(error.name).to.equal('AbortError');
       }
