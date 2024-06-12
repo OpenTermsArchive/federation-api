@@ -3,18 +3,39 @@ import nock from 'nock';
 
 import { fetchCollections } from './collections.js';
 
-describe('Services: Collections', () => {
-  const COLLECTION_1 = { id: 'collection1', name: 'Collection 1', endpoint: 'http://domain1.example/endpoint' };
-  const COLLECTION_2 = { id: 'collection2', name: 'Collection 2', endpoint: 'http://domain1.example/endpoint' };
-  const COLLECTION_3 = { id: 'collection3', name: 'Collection 3', endpoint: 'http://domain1.example/endpoint' };
-  const COLLECTION_1_OVERRIDEN = { id: COLLECTION_1.id, name: 'Override Collection 1', endpoint: 'http://domain2.example/endpoint' };
+const COLLECTION_1 = {
+  id: 'collection1',
+  name: 'Collection 1',
+  endpoint: 'http://domain1.example/endpoint',
+};
+const COLLECTION_2 = {
+  id: 'collection2',
+  name: 'Collection 2',
+  endpoint: 'http://domain2.example/endpoint',
+};
+const COLLECTION_3 = {
+  id: 'collection3',
+  name: 'Collection 3',
+  endpoint: 'http://domain3.example/endpoint',
+};
+const COLLECTION_1_OVERRIDEN = {
+  id: COLLECTION_1.id,
+  name: 'Override Collection 1',
+  endpoint: 'http://domain1.example/endpoint_overriden',
+};
 
+describe('Services: Collections', () => {
   describe('fetchCollections', () => {
-    it('fetches collections from URLs and includes directly defined collections', async () => {
+    before(() => {
       nock('http://domain1.example')
         .get('/collections.json')
-        .reply(200, [ COLLECTION_1, COLLECTION_2 ]);
+        .reply(200, [ COLLECTION_1, COLLECTION_2 ])
+        .persist();
+    });
 
+    after(() => nock.cleanAll());
+
+    it('fetches collections from URLs and includes directly defined collections', async () => {
       const config = [
         'http://domain1.example/collections.json',
         COLLECTION_3,
@@ -25,10 +46,6 @@ describe('Services: Collections', () => {
 
     context('when there are duplicates', () => {
       it('removes duplicates', async () => {
-        nock('http://domain1.example')
-          .get('/collections.json')
-          .reply(200, [ COLLECTION_1, COLLECTION_2 ]);
-
         const config = [
           'http://domain1.example/collections.json',
           COLLECTION_1_OVERRIDEN,

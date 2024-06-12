@@ -59,8 +59,8 @@ describe('Routes: Services', () => {
   const serviceWithUrlEncodedChineseCharactersName = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
 
   before(async () => {
-    nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-    nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+    nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+    nock('https://2.collection.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
 
   after(() => {
@@ -255,8 +255,8 @@ describe('Routes: Services', () => {
     context('when an error occurs in one of the underlying collections', () => {
       before(async () => {
         nock.cleanAll();
-        nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-        nock('https://2.collection.example').get('/api/v1/services').replyWithError({
+        nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+        nock('https://2.collection.example').get('/collection-api/v1/services').replyWithError({
           message: 'something went wrong',
           code: 'ERROR',
         });
@@ -289,8 +289,8 @@ describe('Routes: Services', () => {
     let response;
 
     before(async () => {
-      nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-      nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+      nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+      nock('https://2.collection.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
       response = await request(app).get(`${BASE_PATH}/service/service-1`);
     });
 
@@ -336,11 +336,11 @@ describe('Routes: Services', () => {
         it('has the proper url', () => {
           const [resultCollection1] = response.body.results.filter(result => result.collection == 'collection-1');
 
-          expect(resultCollection1.service).to.have.property('url').that.equals('http://collection-1.example/api/v1/service/service-1');
+          expect(resultCollection1.service).to.have.property('url').that.equals('http://collection-1.example/collection-api/v1/service/service-1');
 
           const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
-          expect(resultCollection2.service).to.have.property('url').that.equals('https://2.collection.example/api/v1/service/service-1');
+          expect(resultCollection2.service).to.have.property('url').that.equals('https://2.collection.example/collection-api/v1/service/service-1');
         });
 
         it('has the proper array of termsTypes', () => {
