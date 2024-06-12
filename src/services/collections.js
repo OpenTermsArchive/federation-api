@@ -70,9 +70,7 @@ function filterInvalidCollections(collections) {
 
 function isURL(string) {
   try {
-    new URL(string); // eslint-disable-line no-new
-
-    return true;
+    return Boolean(new URL(string));
   } catch (error) {
     return false;
   }
