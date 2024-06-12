@@ -3,6 +3,7 @@ import nock from 'nock';
 import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
+import { isURL } from '../utils/url.js';
 
 const COLLECTION_1_SERVICES_RESULT = [
   {
@@ -117,7 +118,7 @@ describe('Routes: Services', () => {
           it('has an url', () => {
             response.body.results.forEach(result => {
               expect(result.service).to.have.property('url').that.is.a('string');
-              expect(isValidURL(result.service.url)).to.be.true;
+              expect(isURL(result.service.url)).to.be.true;
             });
           });
 
@@ -387,13 +388,3 @@ describe('Routes: Services', () => {
     });
   });
 });
-
-function isValidURL(input) {
-  try {
-    new URL(input); // eslint-disable-line no-new
-
-    return true;
-  } catch (error) {
-    return false;
-  }
-}

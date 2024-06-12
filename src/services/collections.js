@@ -1,7 +1,6 @@
-import { URL } from 'url';
-
 import fetchAsJSON from '../utils/fetch.js';
 import logger from '../utils/logger.js';
+import { isURL } from '../utils/url.js';
 
 export async function fetchCollections(collectionsConfig) {
   const errors = [];
@@ -69,12 +68,4 @@ export function validateCollection(collection) {
   }
 
   return errors;
-}
-
-function isURL(string) {
-  try {
-    return Boolean(new URL(string));
-  } catch (error) {
-    return false;
-  }
 }
