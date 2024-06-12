@@ -10,7 +10,7 @@ describe('Services: Collections', () => {
   const COLLECTION_1_OVERRIDEN = { id: COLLECTION_1.id, name: 'Override Collection 1', endpoint: 'http://domain2.example/endpoint' };
 
   describe('fetchCollections', () => {
-    it('fetches collections from URLs and includes directly given collections', async () => {
+    it('fetches collections from URLs and includes directly defined collections', async () => {
       nock('http://domain1.example')
         .get('/collections.json')
         .reply(200, [ COLLECTION_1, COLLECTION_2 ]);
