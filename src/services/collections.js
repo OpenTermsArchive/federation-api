@@ -1,6 +1,6 @@
 import fetchAsJSON from '../utils/fetch.js';
 import logger from '../utils/logger.js';
-import { isURL } from '../utils/url.js';
+import { isValidURL } from '../utils/url.js';
 
 export async function fetchCollections(collectionsConfig) {
   const errors = [];
@@ -60,7 +60,7 @@ export function validateCollection(collection) {
   let isEndpointValidUrl = true;
 
   if (collection.endpoint) {
-    isEndpointValidUrl = isURL(collection.endpoint);
+    isEndpointValidUrl = isValidURL(collection.endpoint);
 
     if (!isEndpointValidUrl) {
       errors.push('the endpoint is not a valid URL');

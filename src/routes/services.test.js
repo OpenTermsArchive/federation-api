@@ -3,7 +3,7 @@ import nock from 'nock';
 import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
-import { isURL } from '../utils/url.js';
+import { isValidURL } from '../utils/url.js';
 
 const COLLECTION_1_SERVICES_RESULT = [
   {
@@ -118,7 +118,7 @@ describe('Routes: Services', () => {
           it('has an url', () => {
             response.body.results.forEach(result => {
               expect(result.service).to.have.property('url').that.is.a('string');
-              expect(isURL(result.service.url)).to.be.true;
+              expect(isValidURL(result.service.url)).to.be.true;
             });
           });
 
