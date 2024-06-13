@@ -20,7 +20,7 @@ export const checkStatus = response => {
   throw new HTTPResponseError(response);
 };
 
-const fetch = async (url, options, timeout = DEFAULT_TIMEOUT) => {
+const fetchAsJSON = async (url, options, timeout = DEFAULT_TIMEOUT) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
     controller.abort();
@@ -37,4 +37,4 @@ const fetch = async (url, options, timeout = DEFAULT_TIMEOUT) => {
   }
 };
 
-export default fetch;
+export default fetchAsJSON;

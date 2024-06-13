@@ -1,20 +1,9 @@
 import { expect } from 'chai';
-import config from 'config';
 import nock from 'nock';
 import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
-
-export const COLLECTIONS_RESULT = {
-  'Collection 1': {
-    id: 'collection-1',
-    endpoint: 'http://collection-1.example/api/v1',
-  },
-  'Collection 2': {
-    id: 'collection-2',
-    endpoint: 'https://2.collection.example/api/v1',
-  },
-};
+import { isValidURL } from '../utils/url.js';
 
 const COLLECTION_1_SERVICES_RESULT = [
   {
@@ -66,13 +55,13 @@ const COLLECTION_2_SERVICES_RESULT = [
   },
 ];
 
-describe('Services routes', () => {
+// Use the global HTTP request mock for the URL 'https://opentermsarchive.org/collections.json' defined in 'test/helpers.js'
+describe('Routes: Services', () => {
   const serviceWithUrlEncodedChineseCharactersName = '%E6%8A%96%E9%9F%B3%E7%9F%AD%E8%A7%86%E9%A2%91';
 
-  before(() => {
-    nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
-    nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-    nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+  before(async () => {
+    nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+    nock('https://2.collection.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
   });
 
   after(() => {
@@ -265,33 +254,67 @@ describe('Services routes', () => {
     });
 
     context('when an error occurs in one of the underlying collections', () => {
-      before(async () => {
-        nock.cleanAll();
-        nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
-        nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-        nock('https://2.collection.example').get('/api/v1/services').replyWithError({
-          message: 'something went wrong',
-          code: 'ERROR',
-        });
-        response = await request(app).get(`${BASE_PATH}/services`);
-      });
+      context('with an error in the JSON response', () => {
+        const ERROR_MESSAGE = 'something went wrong';
 
-      it('returns a non empty results array', () => {
-        expect(response.body.results).to.not.be.empty;
-      });
-
-      it('returns a non empty failures array', () => {
-        expect(response.body.failures).to.not.be.empty;
-      });
-
-      describe('failure entries', () => {
-        it('have a collection name', () => {
-          expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
+        before(async () => {
+          nock.cleanAll();
+          nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+          nock('https://2.collection.example').get('/collection-api/v1/services').replyWithError({
+            message: ERROR_MESSAGE,
+            code: 'ERROR',
+          });
+          response = await request(app).get(`${BASE_PATH}/services`);
         });
 
-        it('have a detailed error message', () => {
-          response.body.failures.forEach(failure => {
-            expect(failure).to.have.property('message').that.has.string('something went wrong');
+        it('returns a non empty results array', () => {
+          expect(response.body.results).to.not.be.empty;
+        });
+
+        it('returns a non empty failures array', () => {
+          expect(response.body.failures).to.not.be.empty;
+        });
+
+        describe('failure entries', () => {
+          it('have a collection name', () => {
+            expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
+          });
+
+          it('have a detailed error message', () => {
+            response.body.failures.forEach(failure => {
+              expect(failure).to.have.property('message').that.has.string(ERROR_MESSAGE);
+            });
+          });
+        });
+      });
+
+      [ 403, 404, 500, 502 ].forEach(errorCode => {
+        context(`with a HTTP ${errorCode} error`, () => {
+          before(async () => {
+            nock.cleanAll();
+            nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+            nock('https://2.collection.example').get('/collection-api/v1/services').reply(errorCode);
+            response = await request(app).get(`${BASE_PATH}/services`);
+          });
+
+          it('returns a non empty results array', () => {
+            expect(response.body.results).to.not.be.empty;
+          });
+
+          it('returns a non empty failures array', () => {
+            expect(response.body.failures).to.not.be.empty;
+          });
+
+          describe('failure entries', () => {
+            it('have a collection name', () => {
+              expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
+            });
+
+            it('have a detailed error message', () => {
+              response.body.failures.forEach(failure => {
+                expect(failure).to.have.property('message').that.has.string(errorCode);
+              });
+            });
           });
         });
       });
@@ -302,8 +325,8 @@ describe('Services routes', () => {
     let response;
 
     before(async () => {
-      nock('http://collection-1.example').persist().get('/api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-      nock('https://2.collection.example').persist().get('/api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
+      nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+      nock('https://2.collection.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_2_SERVICES_RESULT);
       response = await request(app).get(`${BASE_PATH}/service/service-1`);
     });
 
@@ -349,11 +372,11 @@ describe('Services routes', () => {
         it('has the proper url', () => {
           const [resultCollection1] = response.body.results.filter(result => result.collection == 'collection-1');
 
-          expect(resultCollection1.service).to.have.property('url').that.equals('http://collection-1.example/api/v1/service/service-1');
+          expect(resultCollection1.service).to.have.property('url').that.equals('http://collection-1.example/collection-api/v1/service/service-1');
 
           const [resultCollection2] = response.body.results.filter(result => result.collection == 'collection-2');
 
-          expect(resultCollection2.service).to.have.property('url').that.equals('https://2.collection.example/api/v1/service/service-1');
+          expect(resultCollection2.service).to.have.property('url').that.equals('https://2.collection.example/collection-api/v1/service/service-1');
         });
 
         it('has the proper array of termsTypes', () => {
@@ -400,13 +423,3 @@ describe('Services routes', () => {
     });
   });
 });
-
-function isValidURL(input) {
-  try {
-    new URL(input); // eslint-disable-line no-new
-
-    return true;
-  } catch (error) {
-    return false;
-  }
-}

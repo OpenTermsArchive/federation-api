@@ -1,30 +1,9 @@
 import { expect } from 'chai';
-import config from 'config';
-import nock from 'nock';
 import request from 'supertest';
 
 import app, { BASE_PATH } from '../index.js';
 
-const COLLECTIONS_RESULT = {
-  'Collection 1': {
-    id: 'collection-1',
-    endpoint: 'http://collection-1.example/api/v1',
-  },
-  'Collection 2': {
-    id: 'collection-2',
-    endpoint: 'https://2.collection.example/api/v1',
-  },
-};
-
-describe('Collections routes', () => {
-  before(() => {
-    nock(config.get('@opentermsarchive/federation-api.collectionsUrl')).persist().get('').reply(200, COLLECTIONS_RESULT);
-  });
-
-  after(() => {
-    nock.cleanAll();
-  });
-
+describe('Routes: Collections', () => {
   describe('GET /collections', () => {
     let response;
 

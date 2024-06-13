@@ -1,10 +1,9 @@
-import { fetchCollections } from '../services/collections.js';
 import { fetchServices, isServiceIDValid } from '../services/services.js';
 
 export const getServices = async (req, res) => {
   const { name: requestedName, termsType: requestedTermsType } = req.query;
 
-  const collections = await fetchCollections();
+  const { collections } = req.app.locals;
 
   const results = [];
   const failures = [];
@@ -51,7 +50,7 @@ export const getService = async (req, res) => {
     return res.status(400).json();
   }
 
-  const collections = await fetchCollections();
+  const { collections } = req.app.locals;
 
   const results = [];
   const failures = [];

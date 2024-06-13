@@ -1,6 +1,8 @@
 {
   "@opentermsarchive/federation-api": {
-    "collectionsUrl": "https://opentermsarchive.org/collections.json",
+    "collections": [
+      "https://opentermsarchive.org/collections.json"
+    ],
     "logger": {
       "smtp": {
         "host": "smtp-relay.sendinblue.com",
