@@ -57,14 +57,8 @@ export function validateCollection(collection) {
     errors.push('lack mandatory fields "id", "name", or "endpoint"');
   }
 
-  let isEndpointValidUrl = true;
-
-  if (collection.endpoint) {
-    isEndpointValidUrl = isValidURL(collection.endpoint);
-
-    if (!isEndpointValidUrl) {
-      errors.push('the endpoint is not a valid URL');
-    }
+  if (collection.endpoint && !isValidURL(collection.endpoint)) {
+    errors.push('the endpoint is not a valid URL');
   }
 
   return errors;
