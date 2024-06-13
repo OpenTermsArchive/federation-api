@@ -1,6 +1,6 @@
 {
   "name": "@opentermsarchive/federation-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Open Terms Archive federation API to easy querying the distributed database",
   "homepage": "https://github.com/OpenTermsArchive/federation-api#readme",
   "bugs": {
