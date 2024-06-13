@@ -254,32 +254,67 @@ describe('Routes: Services', () => {
     });
 
     context('when an error occurs in one of the underlying collections', () => {
-      before(async () => {
-        nock.cleanAll();
-        nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
-        nock('https://2.collection.example').get('/collection-api/v1/services').replyWithError({
-          message: 'something went wrong',
-          code: 'ERROR',
-        });
-        response = await request(app).get(`${BASE_PATH}/services`);
-      });
+      context('with an error in the JSON response', () => {
+        const ERROR_MESSAGE = 'something went wrong';
 
-      it('returns a non empty results array', () => {
-        expect(response.body.results).to.not.be.empty;
-      });
-
-      it('returns a non empty failures array', () => {
-        expect(response.body.failures).to.not.be.empty;
-      });
-
-      describe('failure entries', () => {
-        it('have a collection name', () => {
-          expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
+        before(async () => {
+          nock.cleanAll();
+          nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+          nock('https://2.collection.example').get('/collection-api/v1/services').replyWithError({
+            message: ERROR_MESSAGE,
+            code: 'ERROR',
+          });
+          response = await request(app).get(`${BASE_PATH}/services`);
         });
 
-        it('have a detailed error message', () => {
-          response.body.failures.forEach(failure => {
-            expect(failure).to.have.property('message').that.has.string('something went wrong');
+        it('returns a non empty results array', () => {
+          expect(response.body.results).to.not.be.empty;
+        });
+
+        it('returns a non empty failures array', () => {
+          expect(response.body.failures).to.not.be.empty;
+        });
+
+        describe('failure entries', () => {
+          it('have a collection name', () => {
+            expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
+          });
+
+          it('have a detailed error message', () => {
+            response.body.failures.forEach(failure => {
+              expect(failure).to.have.property('message').that.has.string(ERROR_MESSAGE);
+            });
+          });
+        });
+      });
+
+      [ 403, 404, 500, 502 ].forEach(errorCode => {
+        context(`with a HTTP ${errorCode} error`, () => {
+          before(async () => {
+            nock.cleanAll();
+            nock('http://collection-1.example').persist().get('/collection-api/v1/services').reply(200, COLLECTION_1_SERVICES_RESULT);
+            nock('https://2.collection.example').get('/collection-api/v1/services').reply(errorCode);
+            response = await request(app).get(`${BASE_PATH}/services`);
+          });
+
+          it('returns a non empty results array', () => {
+            expect(response.body.results).to.not.be.empty;
+          });
+
+          it('returns a non empty failures array', () => {
+            expect(response.body.failures).to.not.be.empty;
+          });
+
+          describe('failure entries', () => {
+            it('have a collection name', () => {
+              expect(response.body.failures.map(failure => failure.collection)).to.have.members(['collection-2']);
+            });
+
+            it('have a detailed error message', () => {
+              response.body.failures.forEach(failure => {
+                expect(failure).to.have.property('message').that.has.string(errorCode);
+              });
+            });
           });
         });
       });
