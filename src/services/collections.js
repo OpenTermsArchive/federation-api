@@ -42,7 +42,7 @@ export async function fetchCollections(collectionsConfig) {
   });
 
   if (errors.length) {
-    throw new Error(`\n${errors.join('\n')}`);
+    throw new Error(`${errors.length > 1 ? '\n' : ''}${errors.join('\n')}`);
   }
 
   return Array.from(uniqueCollections.values());
