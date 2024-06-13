@@ -21,15 +21,22 @@ app.use(errorsMiddleware);
 
 const PORT = config.get('@opentermsarchive/federation-api.port');
 
-const collections = await fetchCollections(config.get('@opentermsarchive/federation-api.collections')).catch(error => {
-  logger.error(error);
-  process.exit(1);
-});
+export async function initializeCollections(collectionsConfig) {
+  try {
+    const collections = await fetchCollections(collectionsConfig);
 
-if (!collections.length) {
-  logger.error('No valid collection declared, the process will exit as this API cannot fulfil any request');
-  process.exit(2);
+    if (!collections.length) {
+      throw new Error('No valid collection declared, the process will exit as this API cannot fulfil any request');
+    }
+
+    return collections;
+  } catch (error) {
+    logger.error(error.message);
+    process.exit(1);
+  }
 }
+
+const collections = await initializeCollections(config.get('@opentermsarchive/federation-api.collections'));
 
 app.locals.collections = collections;
 
