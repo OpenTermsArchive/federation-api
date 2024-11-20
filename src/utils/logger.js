@@ -11,8 +11,12 @@ const transports = [new winston.transports.Console({ silent: process.env.NODE_EN
 const logger = winston.createLogger({
   format: combine(
     colorize(),
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    printf(({ level, message, timestamp }) => `${timestamp} ${level.padEnd(15)} ${message}`),
+    timestamp({ format: 'YYYY-MM-DDTHH:mm:ssZ' }),
+    printf(({ level, message, timestamp }) => {
+      const timestampPrefix = config.get('@opentermsarchive/federation-api.logger.timestampPrefix') ? `${timestamp} ` : '';
+
+      return `${timestampPrefix}${level.padEnd(15)} ${message}`;
+    }),
   ),
   transports,
   rejectionHandlers: transports,
