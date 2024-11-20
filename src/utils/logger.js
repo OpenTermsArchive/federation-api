@@ -11,7 +11,7 @@ const transports = [new winston.transports.Console({ silent: process.env.NODE_EN
 const logger = winston.createLogger({
   format: combine(
     colorize(),
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    timestamp({ format: 'YYYY-MM-DDTHH:mm:ssZ' }),
     printf(({ level, message, timestamp }) => {
       const timestampPrefix = config.get('@opentermsarchive/federation-api.logger.timestampPrefix') ? `${timestamp} ` : '';
 
