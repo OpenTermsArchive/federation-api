@@ -40,7 +40,7 @@ const collections = await initializeCollections(config.get('@opentermsarchive/fe
 
 app.locals.collections = collections;
 
-app.listen(PORT, () => {
+app.listen(PORT, '127.0.0.1', () => {
   logger.info(`Start Open Terms Archive Federation API on http://localhost:${PORT}${BASE_PATH}`);
 });
 
