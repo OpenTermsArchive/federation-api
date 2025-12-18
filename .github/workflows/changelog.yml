@@ -9,10 +9,18 @@ on:
     types: [ opened, reopened ]
   workflow_call:
     outputs:
-      release_type:
+      release-type:
         description: The release type extracted from changelog
-        value: ${{ jobs.check_changelog.outputs.release_type }}
+        value: ${{ jobs.validate.outputs.release-type }}
 
 jobs:
-  check_changelog:
-    uses: OpenTermsArchive/engine/.github/workflows/changelog.yml@v0.37.1
+  validate:
+    runs-on: [ ubuntu-latest ]
+    outputs:
+      release-type: ${{ steps.validate-changelog.outputs.release-type }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate changelog
+        id: validate-changelog
+        uses: OpenTermsArchive/changelog-action/validate@v0.2.0
